@@ -1,20 +1,19 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required (VERSION 2.8)
 
-project(au_git)
+project (au_git)
 
-set(SOURCE_EXE ./src/main.cpp)
+set (CMAKE_CXX_FLAGS "-Wall -std=c++11")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin/)
-set(CMAKE_BINARY_DIR ./bin/)
+include_directories(src include)
 
-#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ./build/)
-#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ./build/)
+set (SOURCE
+    src/main.cpp
+)
 
-#set(CMAKE_BUILD_FILES_DIRECTORY ./bin/)
-#set(CMAKE_BUILD_DIRECTORY ./bin/)
+add_executable(au_git ${SOURCE})
 
-include_directories(include)
+# find_package(OpenSSL REQUIRED)
+# find_package(Boost COMPONENTS program_options REQUIRED)
 
-add_executable(main ${SOURCE_EXE})
-
-target_link_libraries(main)
+target_link_libraries(au_git ${OPENSSL_LIBRARIES} ${Boost_PROGRAM_OPTIONS_LIBRARY})
+include_directories(${Boost_INCLUDE_DIRS})
