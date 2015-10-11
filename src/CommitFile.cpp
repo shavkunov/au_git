@@ -5,13 +5,13 @@
 #include "../include/CommitFile.hpp"
 
 CommitFile::CommitFile(const std::string &filename)
-        : m_filename(filename)
+        : m_file(filename), m_timestamp(std::time_t(0))
 {
 }
 
 std::string CommitFile::filename() const
 {
-    return m_filename;
+    return m_file.filename().string();
 }
 
 HashCodeType CommitFile::hash_code_file() const

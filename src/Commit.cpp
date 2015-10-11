@@ -3,22 +3,22 @@
 //
 
 #include "../include/Commit.hpp"
+#include "../include/CommitException.hpp"
 
 Commit::Commit()
 {
 
 }
 
-Commit::Commit(const std::list <CommitFile> &commit_files)
-{
-    //m_hash_code_commit = "abcd";
-    //m_parent_hash_code = "bcde";
-    m_meta_info        = "meta info";
-    m_commit_files = commit_files;
-}
-
 void Commit::add_files(const std::list<CommitFile> &commit_files)
 {
+    //for(CommitFile current_commit_file : commit_files)
+    {
+        //if (!boost::filesystem::exists(current_commit_file.filename()))
+        {
+            ;//throw FileIsNotFoundException("File is not found");
+        }
+    }
     // ?
     m_commit_files.insert(m_commit_files.end(), commit_files.begin(), commit_files.end());
 }
@@ -26,4 +26,9 @@ void Commit::add_files(const std::list<CommitFile> &commit_files)
 void Commit::set_parent_commit(const HashCodeType parent_commit_type)
 {
     m_parent_hash_code = parent_commit_type;
+}
+
+HashCodeType Commit::get_hash_code() const
+{
+    return m_hash_code_commit;
 }

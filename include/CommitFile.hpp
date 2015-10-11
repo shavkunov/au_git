@@ -6,6 +6,9 @@
 #define AU_GIT_COMMITFILE_HPP
 
 #include <string>
+#include <ctime>
+
+#include <boost/filesystem.hpp>
 
 #include "HashCodeType.hpp"
 
@@ -19,9 +22,9 @@ public:
     void         set_remove_flag();
 
 private:
-    std::string  m_filename;
-    HashCodeType m_hash_code_file;
-
+    boost::filesystem::path m_file;
+    HashCodeType            m_hash_code_file;
+    std::time_t             m_timestamp;
 };
 
 #endif //AU_GIT_COMMITFILE_HPP

@@ -16,11 +16,12 @@ class Commit
 {
 public:
     Commit();
-    Commit(const std::list <CommitFile> &);
 
     void add_files(const std::list <CommitFile> &);
 
     void set_parent_commit(const HashCodeType);
+
+    HashCodeType get_hash_code() const;
 
     void print()
     {

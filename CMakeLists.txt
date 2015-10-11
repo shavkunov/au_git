@@ -11,12 +11,22 @@ set(SOURCE_FILES
         src/CommitFile.cpp
         src/Commit.cpp
         src/HashCodeType.cpp
-        src/TreeNode.cpp)
+        src/TreeNode.cpp
+        src/StageRepository.cpp
+)
 
 add_executable(au_git ${SOURCE_FILES})
 
 find_package(OpenSSL REQUIRED)
 find_package(Boost COMPONENTS program_options REQUIRED)
+find_package(Boost COMPONENTS filesystem REQUIRED)
+find_package(Boost COMPONENTS system REQUIRED)
 
-target_link_libraries(au_git ${OPENSSL_LIBRARIES} ${Boost_PROGRAM_OPTIONS_LIBRARY})
+target_link_libraries(au_git
+        ${OPENSSL_LIBRARIES}
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        ${Boost_FILESYSTEM_LIBRARY}
+        ${Boost_SYSTEM_LIBRARIES}
+)
+
 include_directories(${Boost_INCLUDE_DIRS})
