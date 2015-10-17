@@ -6,6 +6,13 @@
 #define AU_GIT_STAGEREPOSITORY_HPP
 
 class StageRepository
-{};
+{
+public:
+    StageRepository();
+    ~StageRepository();
+
+private:
+
+};
 
 #endif //AU_GIT_STAGEREPOSITORY_HPP

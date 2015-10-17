@@ -2,30 +2,29 @@
 // Created by mikhail on 10/10/15.
 //
 
-#include <string>
+#include <stdexcept>
 
 #ifndef AU_GIT_COMMITEXCEPTION_HPP
 #define AU_GIT_COMMITEXCEPTION_HPP
 
-class CommitException
+class CommitException : public std::exception
 {
 public:
-    CommitException(const std::string message)
-        :m_message(message)
+    CommitException(char const* message)
+        : m_message(message)
     {}
-    virtual const std::string what() const throw()
+    virtual const char* what()
     {
         return m_message;
     }
-
 private:
-    std::string m_message;
+    char const* m_message;
 };
 
 class FileIsNotFoundException : public CommitException
 {
 public:
-    FileIsNotFoundException(const std::string message)
+    FileIsNotFoundException(char* message)
             :CommitException(message)
     {}
 };

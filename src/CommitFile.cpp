@@ -2,7 +2,7 @@
 // Created by mikhail on 10/10/15.
 //
 
-#include "../include/CommitFile.hpp"
+#include "CommitFile.hpp"
 
 CommitFile::CommitFile(const std::string &filename)
         : m_file(filename), m_timestamp(std::time_t(0))
@@ -11,7 +11,7 @@ CommitFile::CommitFile(const std::string &filename)
 
 std::string CommitFile::filename() const
 {
-    return m_file.filename().string();
+    return m_file;//m_file.filename().string();
 }
 
 HashCodeType CommitFile::hash_code_file() const

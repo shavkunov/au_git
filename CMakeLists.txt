@@ -21,12 +21,14 @@ find_package(OpenSSL REQUIRED)
 find_package(Boost COMPONENTS program_options REQUIRED)
 find_package(Boost COMPONENTS filesystem REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost COMPONENTS serialization REQUIRED)
 
 target_link_libraries(au_git
         ${OPENSSL_LIBRARIES}
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         ${Boost_FILESYSTEM_LIBRARY}
         ${Boost_SYSTEM_LIBRARIES}
+        ${Boost_SERIALIZATION_LIBRARY}
 )
 
 include_directories(${Boost_INCLUDE_DIRS})

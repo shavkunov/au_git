@@ -2,7 +2,7 @@
 // Created by mikhail on 10/10/15.
 //
 
-#include "../include/HashCodeType.hpp"
+#include "HashCodeType.hpp"
 
 HashCodeType::HashCodeType()
     : m_hash_code(""), m_valid_feature(true)

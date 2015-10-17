@@ -6,6 +6,10 @@
 #define AU_GIT_REPOSITORY_HPP
 
 class Repository
-{};
+{
+public:
+    Repository();
+    ~Repository();
+};
 
 #endif //AU_GIT_REPOSITORY_HPP

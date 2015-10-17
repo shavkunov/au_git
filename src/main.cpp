@@ -1,7 +1,8 @@
 #include <iostream>
+#include <initializer_list>
 
-#include "../include/CommitTree.hpp"
-#include "../include/CommitException.hpp"
+#include "CommitTree.hpp"
+#include "CommitException.hpp"
 
 #include <boost/filesystem.hpp>
 
@@ -10,53 +11,31 @@ int main()
 
     try
     {
-
         CommitTree tree;
-        //    for(int i = 0; i < 10; ++i)
-        //        tree.push_commit(Commit(i));
-        //
-        //    std::cout << "Tree size: " << tree.tree_size() << std::endl;
-        //
-        //    while (!tree.is_empty())
-        //    {
-        //        tree.last_commit().print();
-        //        tree.pop_commit();
-        //    }
-        // test
 
-        Commit test_commit;
-        std::list<CommitFile> files;
+        std::vector <CommitFile> commits{ CommitFile("1"), CommitFile("2"), CommitFile("3") };
+        Commit simple_commit;
+        simple_commit.add_files(commits);
+        tree.push_commit(simple_commit);
 
-        files.push_back(CommitFile("./Commit.cpp"));
-        files.push_back(CommitFile("3"));
-        files.push_back(CommitFile("2"));
-        test_commit.add_files(files);
+        std::vector <CommitFile> commits3{ CommitFile("11"), CommitFile("211"), CommitFile("311") };
+        Commit simple_commit3;
+        simple_commit3.add_files(commits3);
+        tree.push_commit(simple_commit3);
 
-        Commit s;
-        std::list<CommitFile> files2;
+        std::vector <CommitFile> commits2{ CommitFile("4"), CommitFile("5"), CommitFile("6") };
+        Commit simple_commit2;
+        simple_commit2.add_files(commits2);
+        //tree.push_commit(simple_commit2);
 
-        files2.push_back(CommitFile("1"));
-        files2.push_back(CommitFile("13"));
-        files2.push_back(CommitFile("2"));
-        files2.push_back(CommitFile("21"));
-        files2.push_back(CommitFile("27"));
-        s.add_files(files2);
+        tree.create_branch(simple_commit2, 0);
 
-
-        tree.push_commit(test_commit);
-        tree.push_commit(s);
-
-        while (!tree.is_empty())
-        {
-            tree.last_commit().print();
-            tree.pop_commit();
-        }
+        //tree.print_current_node();
     }
     catch (CommitException &e)
     {
         std::cout << e.what() << std::endl;
     }
-
 
     return 0;
 }

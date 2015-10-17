@@ -8,25 +8,30 @@
 #include "Commit.hpp"
 #include "TreeNode.hpp"
 
+class TreeNode;
+
 class CommitTree
 {
 public:
     CommitTree();
     ~CommitTree();
 
-    void   push_commit(const Commit &commit);
-    void   pop_commit ();
-    bool   is_empty   () const;
-    size_t tree_size  () const;
-    Commit last_commit() const;
+    void push_commit(const Commit &commit);
+    void pop_commit();
+    void create_branch(const Commit &commit, size_t position);
+    void print_current_node() const;
 
 private:
-    TreeNode* m_root_tree = new TreeNode();
-    TreeNode* m_tail_tree = nullptr;
-    size_t    m_tree_size = 0;
-
     void serialize();
     void deserialize();
+
+    TreeNode* find_node_by_node_index(size_t index);
+
+private:
+    std::vector <TreeNode*> m_branches;
+    TreeNode*               m_current_node = nullptr;
+    size_t                  m_last_index   = 0;
+    size_t                  m_current_index_branch;
 };
 
 

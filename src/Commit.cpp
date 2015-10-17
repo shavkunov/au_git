@@ -2,15 +2,15 @@
 // Created by mikhail on 10/10/15.
 //
 
-#include "../include/Commit.hpp"
-#include "../include/CommitException.hpp"
+#include "Commit.hpp"
+#include "CommitException.hpp"
 
 Commit::Commit()
 {
 
 }
 
-void Commit::add_files(const std::list<CommitFile> &commit_files)
+void Commit::add_files(const std::vector <CommitFile> &commit_files)
 {
     //for(CommitFile current_commit_file : commit_files)
     {

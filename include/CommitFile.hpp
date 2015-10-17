@@ -16,15 +16,25 @@ class CommitFile
 {
 public:
     CommitFile(const std::string &);
+    CommitFile(){}
 
     std::string  filename       () const;
     HashCodeType hash_code_file () const;
     void         set_remove_flag();
 
 private:
-    boost::filesystem::path m_file;
+    //boost::filesystem::path m_file;
+    std::string m_file;
     HashCodeType            m_hash_code_file;
     std::time_t             m_timestamp;
+
+    friend class boost::serialization::access;
+
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned version)
+    {
+        ar & m_file & m_hash_code_file & m_timestamp;
+    }
 };
 
 #endif //AU_GIT_COMMITFILE_HPP
