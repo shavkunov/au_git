@@ -24,7 +24,7 @@ private:
 class FileIsNotFoundException : public CommitException
 {
 public:
-    FileIsNotFoundException(char* message)
+    FileIsNotFoundException(char const* message)
             :CommitException(message)
     {}
 };

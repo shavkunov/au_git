@@ -13,7 +13,7 @@ set(SOURCE_FILES
         src/HashCodeType.cpp
         src/TreeNode.cpp
         src/StageRepository.cpp
-)
+        include/Sha1Converter.hpp src/Sha1Converter.cpp)
 
 add_executable(au_git ${SOURCE_FILES})
 

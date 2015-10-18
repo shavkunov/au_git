@@ -20,9 +20,9 @@ class Commit
 public:
     Commit();
 
-    void add_files(const std::vector<CommitFile> &);
+    void add_files(const std::vector<CommitFile> &commit_files);
 
-    void set_parent_commit(const HashCodeType);
+    void set_parent_commit(const HashCodeType parent_commit_type);
 
     HashCodeType get_hash_code() const;
 
@@ -38,7 +38,7 @@ public:
 private:
     HashCodeType m_hash_code_commit;
     HashCodeType m_parent_hash_code;
-    std::string m_meta_info;
+    std::string  m_meta_info;
     std::vector<CommitFile> m_commit_files;
 
     friend class boost::serialization::access;

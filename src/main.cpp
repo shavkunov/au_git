@@ -13,7 +13,7 @@ int main()
     {
         CommitTree tree;
 
-        std::vector <CommitFile> commits{ CommitFile("1"), CommitFile("2"), CommitFile("3") };
+        std::vector <CommitFile> commits{ CommitFile("/home/mikhail/Programming/1"), CommitFile("2"), CommitFile("3") };
         Commit simple_commit;
         simple_commit.add_files(commits);
         tree.push_commit(simple_commit);

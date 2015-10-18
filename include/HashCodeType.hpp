@@ -15,8 +15,8 @@ public:
 
     std::string hash_code() const;
     bool        is_valid () const;
-    void        set_valid(bool);
-
+    void        set_valid(bool state_valid_flag);
+    void        set_hashcode(const std::string &code);
 
 private:
     std::string m_hash_code;

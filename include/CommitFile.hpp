@@ -23,17 +23,16 @@ public:
     void         set_remove_flag();
 
 private:
-    //boost::filesystem::path m_file;
-    std::string m_file;
-    HashCodeType            m_hash_code_file;
-    std::time_t             m_timestamp;
+    std::string  m_filename;
+    HashCodeType m_hash_code_file;
+    std::time_t  m_timestamp;
 
     friend class boost::serialization::access;
 
     template<class Archive>
     void serialize(Archive &ar, const unsigned version)
     {
-        ar & m_file & m_hash_code_file & m_timestamp;
+        ar & m_filename & m_hash_code_file & m_timestamp;
     }
 };
 
