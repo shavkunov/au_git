@@ -1,18 +1,12 @@
-//
-// Created by mikhail on 10/10/15.
-//
-
 #include "HashCodeType.hpp"
-#include "Sha1Converter.hpp"
-
-#include <iostream>
+#include <fstream>
 
 HashCodeType::HashCodeType()
-    : m_hash_code(""), m_valid_feature(true)
+    : m_hash_code(), m_valid_feature(true)
 {
 }
 
-std::string HashCodeType::hash_code() const
+Sha256 HashCodeType::hash_code() const
 {
     return m_hash_code;
 }
@@ -27,8 +21,13 @@ void HashCodeType::set_valid(bool state_valid_flag)
     m_valid_feature = state_valid_flag;
 }
 
-void HashCodeType::set_hashcode(const std::string &file_path)
+void HashCodeType::set_hash_code(const std::string &file_path)
 {
-    m_hash_code = sha1_converter(file_path);
-//    std::cout << m_hash_code << std::endl;
+    std::ifstream file(file_path, std::ios::binary);
+    m_hash_code = encode_content_file(file);
+}
+
+void HashCodeType::set_hash_code_by_list(const std::vector <CommitFile> &commits)
+{
+    m_hash_code = encode_contents_list(commits);
 }
