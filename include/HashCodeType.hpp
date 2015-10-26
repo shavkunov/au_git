@@ -1,26 +1,24 @@
-//
-// Created by mikhail on 10/9/15.
-//
-
 #ifndef AU_GIT_HASHCODETYPE_HPP
 #define AU_GIT_HASHCODETYPE_HPP
 
 #include <string>
 #include <boost/serialization/access.hpp>
+#include "Sha1Converter.hpp"
 
 class HashCodeType
 {
 public:
     HashCodeType();
 
-    std::string hash_code() const;
-    bool        is_valid () const;
-    void        set_valid(bool state_valid_flag);
-    void        set_hashcode(const std::string &code);
+    Sha256 hash_code() const;
+    bool   is_valid () const;
+    void   set_valid(bool state_valid_flag);
+    void   set_hash_code(const std::string &file_path);
+    void   set_hash_code_by_list(const std::vector <CommitFile> &commits);
 
 private:
-    std::string m_hash_code;
-    bool        m_valid_feature;
+    Sha256 m_hash_code;
+    bool   m_valid_feature;
 
     friend class boost::serialization::access;
 
