@@ -1,7 +1,3 @@
-//
-// Created by mikhail on 10/9/15.
-//
-
 #ifndef AU_GIT_COMMITFILE_HPP
 #define AU_GIT_COMMITFILE_HPP
 
@@ -15,12 +11,13 @@
 class CommitFile
 {
 public:
-    CommitFile(const std::string &);
-    CommitFile(){}
+    CommitFile();
+    CommitFile(const std::string &filename);
 
     std::string  filename       () const;
     HashCodeType hash_code_file () const;
     void         set_remove_flag();
+    void         add_to_storage() const;
 
 private:
     std::string  m_filename;
