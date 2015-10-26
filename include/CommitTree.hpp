@@ -18,20 +18,20 @@ public:
 
     void push_commit(const Commit &commit);
     void pop_commit();
-    void create_branch(const Commit &commit, size_t position);
+    void create_branch(const Commit &commit, const std::string parent_hash_code);
     void print_current_node() const;
 
 private:
     void serialize();
     void deserialize();
 
-    TreeNode* find_node_by_node_index(size_t index);
+    std::shared_ptr <TreeNode> find_node_by_hash_code(const std::string &parent_hash_code);
 
 private:
-    std::vector <TreeNode*> m_branches;
-    TreeNode*               m_current_node = nullptr;
-    size_t                  m_last_index   = 0;
-    size_t                  m_current_index_branch;
+    std::vector <std::shared_ptr<TreeNode>> m_branches;
+    std::shared_ptr <TreeNode>              m_current_node = nullptr;
+    size_t                                  m_last_index   = 0;
+    size_t                                  m_current_index_branch;
 };
 
 
