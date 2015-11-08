@@ -10,21 +10,26 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/utility.hpp>
 
-CommitTree::CommitTree()
+CommitTree::CommitTree(const std::string &storage_path)
+    : m_storage_path(storage_path)
 {
     std::cout << "Constructor" << std::endl;
-    deserialize();
+    deserialize(m_storage_path);
 }
 
 CommitTree::~CommitTree()
 {
     std::cout << "Destructor" << std::endl;
-    serialize();
+    serialize(m_storage_path);
+}
+
+void CommitTree::set_storage_path(const std::string &storage_path)
+{
+    m_storage_path = storage_path;
 }
 
 void CommitTree::push_commit(const Commit &commit)
 {
-    // insert to commit tree
     std::shared_ptr<TreeNode> add_node(new TreeNode(commit, m_current_node));
     m_current_node = add_node;
 
@@ -34,9 +39,6 @@ void CommitTree::push_commit(const Commit &commit)
         m_current_index_branch = 0;
         return;
     }
-
-    // copy all files to local repository
-    commit.add_to_storage();
 
     m_branches[m_current_index_branch] = m_current_node;
 }
@@ -49,13 +51,10 @@ void CommitTree::create_branch(const Commit &commit, const std::string parent_ha
         throw BranchNotCreatedException("Branch could not be created!");
     }
 
-    commit.add_to_storage();
-
     std::shared_ptr <TreeNode> add_node(new TreeNode(commit, branch_node));
     m_branches.push_back(add_node);
     m_current_index_branch = m_branches.size() - 1;
     m_current_node = add_node;
-    // std::cout << "Branch created!" << std::endl;
 }
 
 std::shared_ptr <TreeNode> CommitTree::find_node_by_hash_code(const std::string& parent_hash_code)
@@ -75,8 +74,8 @@ std::shared_ptr <TreeNode> CommitTree::find_node_by_hash_code(const std::string&
 
 void CommitTree::print_current_node() const
 {
-    //for(std::shared_ptr <TreeNode> ptr = m_current_node; ptr != nullptr; ptr = ptr->m_parent_node)
-    //    ptr->m_commit_value.print();
+    for(std::shared_ptr <TreeNode> ptr = m_current_node; ptr != nullptr; ptr = ptr->m_parent_node)
+        ptr->m_commit_value.print();
 }
 
 void CommitTree::pop_commit()
@@ -87,77 +86,79 @@ void CommitTree::pop_commit()
         return;
     }
     std::shared_ptr <TreeNode> parent_node = m_current_node->m_parent_node;
-    //delete m_current_node;
     m_current_node = parent_node;
     m_branches[m_current_index_branch] = m_current_node;
 }
 
-void CommitTree::serialize()
+void CommitTree::serialize(const std::string &storage_path)
 {
+    std::cout << "Serialize: " << storage_path + m_storage_pakage_name << std::endl;
+
     return;
-//    std::ofstream out_file("./serialization.bin");
-//    boost::archive::text_oarchive archive(out_file);
-//
-//    // <node index, <Commit, parent node index>>
-//    std::map <size_t, std::pair<Commit, size_t>> table_tree;
-//    for(std::shared_ptr <TreeNode> node : m_branches)
-//    {
-//        for(std::shared_ptr <TreeNode> ptr = node; ptr != nullptr; ptr = ptr->m_parent_node)
-//        {
-//            // if current node was not added to the table
-//            if (table_tree.find(node->m_index_position) == table_tree.end())
-//            {
-//                table_tree[node->m_index_position]
-//                        = std::make_pair(node->m_commit_value,
-//                        // if parent of the current node then return nullptr current position
-//                                         (node->m_parent_node) ? node->m_parent_node->m_index_position
-//                                                               : node->m_index_position);
-//            }
-//            else
-//                break;
-//        }
-//    }
-//
-//    std::vector <size_t> last_commits_indexes(m_branches.size());
-//    for(size_t i = 0; i < m_branches.size(); ++i)
-//        last_commits_indexes[i] = m_branches[i]->m_index_position;
-//
-//    archive << m_last_index << m_current_index_branch << table_tree << last_commits_indexes;
+    std::ofstream out_file(storage_path + m_storage_pakage_name);
+
+    boost::archive::text_oarchive archive(out_file);
+    std::map <Commit, std::vector <Commit>> table;
+    Commit root_commit;
+
+    for(std::shared_ptr <TreeNode> node : m_branches)
+    {
+        std::shared_ptr <TreeNode> temp = node;
+        table[node->m_commit_value];
+        while (temp->m_parent_node != nullptr)
+        {
+            table[temp->m_parent_node->m_commit_value].push_back(temp->m_commit_value);
+            temp = temp->m_parent_node;
+        }
+        root_commit = temp->m_commit_value;
+    }
+    archive << table << root_commit;
 }
 
-void CommitTree::deserialize()
+void CommitTree::dfs(std::map <Commit, std::vector <Commit>> &table,
+                     std::shared_ptr <TreeNode> &root,
+                     std::vector <std::shared_ptr<TreeNode>> &branches)
 {
-    return;
-//    std::ifstream in_file("./serialization.bin");
-//    if (!in_file.is_open())
-//    {
-//        std::cout << "File is not found!" << std::endl;
-//        return;
-//    }
-//    try
-//    {
-//        boost::archive::text_iarchive archive(in_file);
-//        std::map <size_t, std::pair<Commit, size_t>> table_tree;
-//        std::vector <size_t> last_commits_indexes;
-//        archive >> m_last_index >> m_current_index_branch >> table_tree >> last_commits_indexes;
-//
-//        std::cout << m_last_index << " " << m_current_index_branch << std::endl;
-//
-//        std::vector <std::shared_ptr <TreeNode>> pointers(table_tree.size(), nullptr);
-//        for(std::pair <size_t, std::pair<Commit, size_t>> p : table_tree)
-//        {
-//            std::cout << p.first << " - " << p.second.second << std::endl;
-//            pointers[p.first] = std::make_shared <TreeNode>(p.second.first, p.first, pointers[p.second.second - 1]);
-//        }
-//
-//        for(size_t index : last_commits_indexes)
-//        {
-//            index = index;
-//            //m_branches.push_back(pointers[index]);
-//        }
-//    }
-//    catch (boost::archive::archive_exception &e)
-//    {
-//        std::cout << e.what() << std::endl;
-//    }
+    if (!table[root->m_commit_value].size())
+    {
+        branches.push_back(root);
+        return;
+    }
+    for(auto& commit : table[root->m_commit_value])
+    {
+        std::shared_ptr <TreeNode> ptr(new TreeNode(commit, root));
+        std::cout << commit.hash_code() << std::endl;
+        dfs(table, ptr, branches);
+    }
 }
+
+void CommitTree::deserialize(const std::string &storage_path)
+{
+    //return;
+    std::cout << "Deserialize: " << storage_path + m_storage_pakage_name << std::endl;
+    std::ifstream in_file(storage_path + m_storage_pakage_name);
+    boost::archive::text_iarchive archive(in_file);
+
+    std::map <Commit, std::vector <Commit>> table;
+    Commit root_commit;
+    archive >> table >> root_commit;
+
+    std::cout << root_commit.hash_code() << std::endl;
+
+    return;
+    m_current_node = std::make_shared <TreeNode>(root_commit);
+    dfs(table, m_current_node, m_branches);
+
+    for(auto a : m_branches)
+    {
+        std::cout << a->m_commit_value.hash_code() << ": ";
+        auto b = a;
+        while (b != nullptr)
+        {
+            //std::cout << b->m_commit_value.hash_code() << " ";
+            b = b->m_parent_node;
+        }
+        std::cout << "\n";
+    }
+}
+

@@ -4,7 +4,8 @@
 #include <string>
 #include <ctime>
 
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/serialization/access.hpp>
 
 #include "HashCodeType.hpp"
 
@@ -14,14 +15,19 @@ public:
     CommitFile();
     CommitFile(const std::string &filename);
 
-    std::string  filename       () const;
-    HashCodeType hash_code_file () const;
-    void         set_remove_flag();
-    void         add_to_storage() const;
+    boost::filesystem::path  filename() const;
+    HashCodeType             hash_code_file () const;
+    void                     set_remove_flag();
+    void                     add_to_storage(const std::string &storage_path) const;
+
+    void print() const
+    {
+        std::cout << m_filename << " ";
+    }
 
 private:
-    std::string  m_filename;
-    HashCodeType m_hash_code_file;
+    std::string   m_filename;
+    HashCodeType  m_hash_code_file;
     std::time_t  m_timestamp;
 
     friend class boost::serialization::access;

@@ -17,10 +17,29 @@ public:
     Commit();
 
     void add_files(const std::vector<CommitFile> &commit_files);
-    void add_to_storage() const;
+    void add_to_storage(const std::string &storage_path) const;
     void set_parent_hash_code_commit(const HashCodeType parent_commit_type);
+    const std::string hash_code() const;
+    static Commit create_commit_by_list(const std::string &storage_path, const std::vector <std::string> &files);
 
     HashCodeType get_hash_code() const;
+
+    void print() const
+    {
+        for(CommitFile c : m_commit_files)
+        {
+            c.print();
+        }
+        std::cout << std::endl;
+    }
+
+    friend bool operator<(const Commit &a, const Commit &b)
+    {
+        return a.m_hash_code_commit.hash_code().to_string() <
+               b.m_hash_code_commit.hash_code().to_string();
+    }
+
+    bool operator== (const Commit &a);
 
 private:
     HashCodeType             m_hash_code_commit;

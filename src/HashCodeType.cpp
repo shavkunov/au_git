@@ -21,13 +21,14 @@ void HashCodeType::set_valid(bool state_valid_flag)
     m_valid_feature = state_valid_flag;
 }
 
-void HashCodeType::set_hash_code(const std::string &file_path)
+void HashCodeType::set_hash_code(const boost::filesystem::path &file_path)
 {
-    std::ifstream file(file_path, std::ios::binary);
+    std::ifstream file(file_path.string(), std::ios::binary);
     m_hash_code = encode_content_file(file);
 }
 
-void HashCodeType::set_hash_code_by_list(const std::vector <CommitFile> &commits)
+void HashCodeType::set_hash_code_by_list(const std::vector <CommitFile> &commits, const HashCodeType &code)
 {
     m_hash_code = encode_contents_list(commits);
+    m_hash_code = add_hash_code(m_hash_code, code.hash_code());
 }
