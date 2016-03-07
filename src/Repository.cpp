@@ -15,7 +15,7 @@ Repository::Repository(const std::string& cur_dir)
 {
     m_repository_path = is_repository_exists(cur_dir);
 
-    if (m_repository_path.empty())
+    if (!m_repository_path.empty())
     {
         m_data_store = std::unique_ptr<DataStore>(new DataStore(m_repository_path));
         m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree());
@@ -66,7 +66,7 @@ boost::filesystem::path Repository::is_repository_exists(boost::filesystem::path
     boost::filesystem::directory_iterator iter;
     if (boost::filesystem::exists(cur_dir) && boost::filesystem::is_directory(cur_dir))
     {
-        while (cur_dir != boost::filesystem::path(""))
+        while (!cur_dir.empty())
         {
             for (boost::filesystem::directory_iterator dir_iter(cur_dir); dir_iter != iter; ++dir_iter)
             {
