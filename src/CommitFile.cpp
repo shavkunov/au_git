@@ -1,15 +1,19 @@
-#include "RepositoryException.hpp"
 #include "CommitFile.hpp"
 
-#include <boost/format.hpp>
 #include <fstream>
+#include <boost/format.hpp>
 
-bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
+#include "RepositoryException.hpp"
+
+namespace
 {
-    std::ifstream in(in_file.string(), std::ios::binary);
-    std::ofstream out(out_file.string(), std::ios::binary);
-    out << in.rdbuf();
-    return in && out;
+    bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
+    {
+        std::ifstream in(in_file.string(), std::ios::binary);
+        std::ofstream out(out_file.string(), std::ios::binary);
+        out << in.rdbuf();
+        return in && out;
+    }
 }
 
 CommitFile::CommitFile()
@@ -35,7 +39,7 @@ void CommitFile::add_to_storage(const std::string& storage_path) const
     std::string hash_code_file = encode_content_file(file).to_string();
     boost::filesystem::path in_file(m_filename);
     boost::filesystem::path out_file(boost::filesystem::path(storage_path).string() + hash_code_file);
-    std::cout << out_file.string() << std::endl;
+
     if (!clone_file(in_file, out_file))
     {
         std::string message = boost::str(boost::format("File [%1%] is not commited!") % m_filename);

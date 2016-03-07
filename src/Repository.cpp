@@ -1,56 +1,58 @@
 #include "Repository.hpp"
+
+#include <fstream>
 #include <string>
 #include <boost/archive/text_oarchive.hpp>
-#include <fstream>
+#include <boost/archive/text_iarchive.hpp>
+
+namespace
+{
+    const std::string repository_store_file_name = "repo";
+    const std::string au_git_folder_name = ".au_git";
+}
 
 Repository::Repository(const std::string& cur_dir)
 {
-    // create repository and start point
-    init_repository(cur_dir);
-    // create datastore (initialization singletone object)
-    m_data_store = DataStore::instance();
-    m_data_store->init_storage(m_objects_path);
+    m_repository_path = is_repository_exists(cur_dir);
 
-
-    m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree(m_objects_path.string()));
+    if (m_repository_path.empty())
+    {
+        m_data_store = std::unique_ptr<DataStore>(new DataStore(m_repository_path));
+        m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree());
+        deserialize();
+    }
 }
 
 void Repository::init_repository(const std::string& cur_dir)
 {
     m_repository_path = is_repository_exists(cur_dir);
-    if (m_repository_path.empty())
+
+    if (!m_repository_path.empty())
     {
-        m_repository_path = boost::filesystem::path(cur_dir + (cur_dir[cur_dir.length() - 1] == '/' ? "" : "/") +".au_git/");
-        std::cout << "!" << m_repository_path << std::endl;
-        boost::filesystem::create_directory(boost::filesystem::path(m_repository_path));
-        m_objects_path = m_repository_path.string() + "/.objects/";
-        boost::filesystem::create_directory(boost::filesystem::path(m_objects_path));
-        std::cout << "repository create: " << m_repository_path << std::endl;
+        // TODO: throw error
+        return;
     }
-    m_objects_path = m_repository_path.string() + "/.objects/";
-    std::cout << "Repository: " << m_repository_path << std::endl;
-    std::cout << "Objects   : " << m_objects_path << std::endl;
+
+    // create service folder
+    m_repository_path = boost::filesystem::path(cur_dir) / au_git_folder_name;
+    boost::filesystem::create_directory(m_repository_path);
+
+    m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree());
 }
 
 Repository::~Repository()
 {
-    if (m_data_store)
-        delete m_data_store;
+    if (!m_repository_path.empty())
+    {
+        serialize();
+    }
 }
 
 void Repository::add_commit(const std::vector<std::string> &files)
 {
     std::cout << "Commit files" << std::endl;
-    Commit new_commit = Commit::create_commit_by_list(m_objects_path.string(), files);
+    Commit new_commit = Commit::create_commit_by_list(files);
     m_commit_tree->push_commit(new_commit);
-    m_data_store->add_commit(new_commit);
-}
-
-void Repository::create_branch(const std::vector<std::string> &files, const std::string &commit_hash)
-{
-    std::cout << "Create branch" << std::endl;
-    Commit new_commit = Commit::create_commit_by_list(m_objects_path.string(), files);
-    m_commit_tree->create_branch(new_commit, commit_hash);
     m_data_store->add_commit(new_commit);
 }
 
@@ -68,22 +70,29 @@ boost::filesystem::path Repository::is_repository_exists(boost::filesystem::path
         {
             for (boost::filesystem::directory_iterator dir_iter(cur_dir); dir_iter != iter; ++dir_iter)
             {
-                if (boost::filesystem::is_directory(*dir_iter) && dir_iter->path().filename() == m_au_git_folder_name)
+                if (boost::filesystem::is_directory(*dir_iter) && dir_iter->path().filename() == au_git_folder_name)
                     return *dir_iter;
             }
             cur_dir = cur_dir.parent_path();
         }
     }
-    return boost::filesystem::path("");
+    return boost::filesystem::path();
 }
 
 void Repository::serialize()
 {
-    //std::ofstream out("out.bin", std::ios::binary);
-    //boost::archive::text_oarchive ser(out);
-    //out << m_commit_tree << m_data_store << m_state_repository << m_repository_path << m_objects_path << m_au_git_folder_name;
+    boost::filesystem::path out_path = m_repository_path / repository_store_file_name;
+    std::ofstream out(out_path.string());
+
+    boost::archive::text_oarchive ser(out);
+    ser << *m_commit_tree << m_state_repository;
 }
 
 void Repository::deserialize()
 {
+    boost::filesystem::path in_path = m_repository_path / repository_store_file_name;
+    std::ifstream in(in_path.string());
+    boost::archive::text_iarchive ser(in);
+
+    ser >> *m_commit_tree >> m_state_repository;
 }

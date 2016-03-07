@@ -1,7 +1,7 @@
-#include <stdexcept>
-
 #ifndef AU_GIT_REPOSITORYEXCEPTION_HPP
 #define AU_GIT_REPOSITORYEXCEPTION_HPP
+
+#include <stdexcept>
 
 class AbstractException : public std::exception
 {
@@ -57,6 +57,5 @@ public:
             :BranchException(message)
     {}
 };
-
 
 #endif //AU_GIT_REPOSITORYEXCEPTION_HPP

@@ -2,8 +2,9 @@
 #define AU_GIT_HASHCODETYPE_HPP
 
 #include <string>
-#include <boost/serialization/access.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/serialization/access.hpp>
+
 #include "Sha256Converter.hpp"
 
 class HashCodeType
@@ -15,7 +16,7 @@ public:
     bool   is_valid () const;
     void   set_valid(bool state_valid_flag);
     void   set_hash_code(const boost::filesystem::path &file_path);
-    void   set_hash_code_by_list(const std::vector <CommitFile> &commits, const HashCodeType &code);
+    void   set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code);
 
 private:
     Sha256 m_hash_code;
@@ -26,7 +27,7 @@ private:
     template<class Archive>
     void serialize(Archive &ar, const unsigned version)
     {
-        //ar & m_hash_code & m_valid_feature;
+        ar & m_hash_code & m_valid_feature;
     }
 };
 

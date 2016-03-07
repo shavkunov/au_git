@@ -1,12 +1,12 @@
 #ifndef AU_GIT_REPOSITORY_HPP
 #define AU_GIT_REPOSITORY_HPP
 
-#include "CommitTree.hpp"
-#include "StateRepository.hpp"
-#include "DataStore.hpp"
-
 #include <memory>
 #include <boost/filesystem.hpp>
+
+#include "CommitTree.hpp"
+#include "DataStore.hpp"
+#include "StateRepository.hpp"
 
 class Repository
 {
@@ -15,23 +15,20 @@ public:
     ~Repository();
 
     // ---------------------------------------- commands ----------------------------------------
-    void add_commit(const std::vector <std::string> &files);
-    void create_branch(const std::vector <std::string> &files, const std::string &commit_hash);
+    void add_commit(const std::vector<std::string> &files);
     void status() const;
+    void init_repository(const std::string& cur_dir);
     //-------------------------------------------------------------------------------------------
 
 private:
-    std::unique_ptr <CommitTree> m_commit_tree;
-    DataStore*                   m_data_store;
+    std::unique_ptr<CommitTree>  m_commit_tree;
+    std::unique_ptr<DataStore>   m_data_store;
     StateRepository              m_state_repository;
 
     boost::filesystem::path      m_repository_path;
-    boost::filesystem::path      m_objects_path;
 
-    const std::string            m_au_git_folder_name = ".au_git";
 
 private:
-    void init_repository(const std::string& cur_dir);
     boost::filesystem::path is_repository_exists(boost::filesystem::path path) const;
 
 private:

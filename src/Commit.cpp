@@ -26,7 +26,7 @@ HashCodeType Commit::get_hash_code() const
     return m_hash_code_commit;
 }
 
-bool Commit::operator== (const Commit &a)
+bool Commit::operator==(const Commit &a)
 {
     return m_hash_code_commit.hash_code().to_string() == a.m_hash_code_commit.hash_code().to_string();
 }
@@ -36,14 +36,15 @@ const std::string Commit::hash_code() const
     return m_hash_code_commit.hash_code().to_string();
 }
 
-Commit Commit::create_commit_by_list(const std::string &storage_path, const std::vector<std::string> &files)
+Commit Commit::create_commit_by_list(const std::vector<std::string> &files)
 {
     Commit commit;
-    std::vector <CommitFile> commit_files;
+    std::vector<CommitFile> commit_files;
     commit_files.reserve(files.size());
+
     for(size_t i = 0; i < files.size(); ++i)
         commit_files.push_back(CommitFile(files[i]));
     commit.add_files(commit_files);
-    std::cout << commit.hash_code() << std::endl;
+
     return commit;
 }

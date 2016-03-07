@@ -1,7 +1,3 @@
-//
-// Created by mikhail on 10/10/15.
-//
-
 #ifndef AU_GIT_STATEREPOSITORY_HPP
 #define AU_GIT_STATEREPOSITORY_HPP
 
@@ -19,7 +15,7 @@ private:
     template<class Archive>
     void serialize(Archive &ar, const unsigned version)
     {
-//        ar & m_hash_code & m_valid_feature;
+        //TODO: implement serialization
     }
 
 };

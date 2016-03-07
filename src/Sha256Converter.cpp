@@ -1,18 +1,21 @@
-#include "Sha256Converter.hpp"
 #include "CommitFile.hpp"
+#include "Sha256Converter.hpp"
+
 #include <fstream>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+
+#include <openssl/sha.h>
 
 std::string Sha256::to_string() const
 {
     std::stringstream stream;
     for(size_t i = 0; i < Sha256::kSize; ++i)
-        stream << std::hex << static_cast <int>(bytes[i]);
+        stream << std::hex << static_cast<int>(bytes[i]);
     return stream.str();
 }
 
-Sha256 calculate_sha256(uint8_t const * bytes, size_t length)
+Sha256 calculate_sha256(const uint8_t* bytes, size_t length)
 {
     Sha256 res;
 
@@ -29,14 +32,14 @@ Sha256 encode_content_file(std::ifstream &in)
     in.seekg(0, in.end);
     uint32_t file_length = in.tellg();
     in.seekg(0, in.beg);
-    uint8_t *bytes = new uint8_t [file_length];
-    in.read((char*)bytes, file_length * sizeof(bytes[0]));
-    Sha256 result_code = calculate_sha256(bytes, file_length);
-    delete []bytes;
-    return result_code;
+
+    std::vector<uint8_t> bytes(file_length);
+    in.read((char*)&bytes[0], file_length);
+
+    return calculate_sha256(&bytes[0], file_length);
 }
 
-Sha256 encode_contents_list(const std::vector <CommitFile> &commits)
+Sha256 encode_contents_list(const std::vector<CommitFile> &commits)
 {
     Sha256 res;
 
