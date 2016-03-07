@@ -10,8 +10,9 @@ Repository::Repository(const std::string& cur_dir)
     // create datastore (initialization singletone object)
     m_data_store = DataStore::instance();
     m_data_store->init_storage(m_objects_path);
-    //
-    m_commit_tree = std::make_unique <CommitTree>(m_objects_path.string());
+
+
+    m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree(m_objects_path.string()));
 }
 
 void Repository::init_repository(const std::string& cur_dir)

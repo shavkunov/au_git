@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(au_git)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -O2 -std=c++14 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -O2 -std=c++11 -g")
 
 include_directories(src include)
 
