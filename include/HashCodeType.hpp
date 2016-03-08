@@ -13,14 +13,14 @@ public:
     HashCodeType();
 
     Sha256 hash_code() const;
-    bool   is_valid () const;
-    void   set_valid(bool state_valid_flag);
-    void   set_hash_code(const boost::filesystem::path &file_path);
-    void   set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code);
+    bool is_valid () const;
+    void set_valid(bool state_valid_flag);
+    void set_hash_code(const boost::filesystem::path &file_path);
+    void set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code);
 
 private:
     Sha256 m_hash_code;
-    bool   m_valid_feature;
+    bool m_valid_feature;
 
     friend class boost::serialization::access;
 

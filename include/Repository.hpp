@@ -21,19 +21,17 @@ public:
     //-------------------------------------------------------------------------------------------
 
 private:
-    std::unique_ptr<CommitTree>  m_commit_tree;
-    std::unique_ptr<DataStore>   m_data_store;
-    StateRepository              m_state_repository;
-
-    boost::filesystem::path      m_repository_path;
-
-
-private:
     boost::filesystem::path is_repository_exists(boost::filesystem::path path) const;
 
-private:
     void serialize();
     void deserialize();
+
+private:
+    std::unique_ptr<CommitTree> m_commit_tree;
+    std::unique_ptr<DataStore> m_data_store;
+    StateRepository m_state_repository;
+
+    boost::filesystem::path m_repository_path;
 };
 
 #endif //AU_GIT_REPOSITORY_HPP

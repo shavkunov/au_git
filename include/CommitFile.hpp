@@ -15,15 +15,16 @@ public:
     CommitFile();
     CommitFile(const std::string &filename);
 
-    boost::filesystem::path  filename() const;
-    HashCodeType             hash_code_file() const;
-    void                     set_remove_flag();
-    void                     add_to_storage(const std::string &storage_path) const;
+    boost::filesystem::path filename() const;
+    HashCodeType hash_code_file() const;
+
+    void set_remove_flag();
+    void add_to_storage(const std::string &storage_path) const;
 
 private:
-    std::string   m_filename;
-    HashCodeType  m_hash_code_file;
-    std::time_t   m_timestamp;
+    std::string m_filename;
+    HashCodeType m_hash_code_file;
+    std::time_t m_timestamp;
 
     friend class boost::serialization::access;
 
