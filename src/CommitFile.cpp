@@ -38,7 +38,7 @@ void CommitFile::add_to_storage(const std::string& storage_path) const
     std::ifstream file(m_filename, std::ios::binary);
     std::string hash_code_file = encode_content_file(file).to_string();
     boost::filesystem::path in_file(m_filename);
-    boost::filesystem::path out_file(boost::filesystem::path(storage_path).string() + hash_code_file);
+    boost::filesystem::path out_file(boost::filesystem::path(storage_path) / hash_code_file);
 
     if (!clone_file(in_file, out_file))
     {

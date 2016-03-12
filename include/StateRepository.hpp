@@ -1,3 +1,7 @@
+/*
+ *
+ */
+
 #ifndef AU_GIT_STATEREPOSITORY_HPP
 #define AU_GIT_STATEREPOSITORY_HPP
 

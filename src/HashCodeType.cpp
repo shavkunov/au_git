@@ -1,3 +1,4 @@
+
 #include "HashCodeType.hpp"
 #include <fstream>
 

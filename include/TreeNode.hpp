@@ -10,8 +10,8 @@ public:
     TreeNode();
     TreeNode(Commit commit, std::shared_ptr<TreeNode> parent_node = nullptr);
 
-    Commit m_commit_value;
-    std::shared_ptr<TreeNode> m_parent_node;
+    Commit commit_value;
+    std::shared_ptr<TreeNode> parent_node;
 
 private:
     friend class boost::serialization::access;
@@ -19,12 +19,12 @@ private:
     template<class Archive>
     void save(Archive &ar, const unsigned version) const
     {
-        bool has_parent = m_parent_node != nullptr;
-        ar << m_commit_value << has_parent;
+        bool has_parent = parent_node != nullptr;
+        ar << commit_value << has_parent;
 
         if (has_parent)
         {
-            ar << *m_parent_node;
+            ar << *parent_node;
         }
     }
 
@@ -32,12 +32,12 @@ private:
     void load(Archive &ar, const unsigned version)
     {
         bool has_parent;
-        ar >> m_commit_value >> has_parent;
+        ar >> commit_value >> has_parent;
 
         if (has_parent)
         {
-            m_parent_node = std::make_shared<TreeNode>();
-            ar >> *m_parent_node;
+            parent_node = std::make_shared<TreeNode>();
+            ar >> *parent_node;
         }
     }
 

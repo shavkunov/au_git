@@ -17,6 +17,7 @@ Repository::Repository(const std::string& cur_dir)
 
     if (!m_repository_path.empty())
     {
+	std::cerr << "create" << std::endl;
         m_data_store = std::unique_ptr<DataStore>(new DataStore(m_repository_path));
         m_commit_tree = std::unique_ptr<CommitTree>(new CommitTree());
         deserialize();

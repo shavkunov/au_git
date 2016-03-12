@@ -12,7 +12,7 @@ void Commit::add_files(const std::vector <CommitFile> &commit_files)
 
 void Commit::add_to_storage(const std::string &storage_path) const
 {
-    for(CommitFile commit_file : m_commit_files)
+    for(CommitFile commit_file : m_commit_files)//&
         commit_file.add_to_storage(storage_path);
 }
 

@@ -27,9 +27,9 @@ void CommitTree::push_commit(const Commit &commit)
 
 std::shared_ptr<TreeNode> CommitTree::find_node_by_hash_code(const std::string& hash_code)
 {
-    for(std::shared_ptr<TreeNode> ptr = m_head; ptr != nullptr; ptr = ptr->m_parent_node)
+    for(std::shared_ptr<TreeNode> ptr = m_head; ptr != nullptr; ptr = ptr->parent_node)
     {
-        if (ptr->m_commit_value.get_hash_code().hash_code().to_string() == hash_code)
+        if (ptr->commit_value.get_hash_code().hash_code().to_string() == hash_code)
         {
             return ptr;
         }
@@ -44,6 +44,6 @@ void CommitTree::pop_commit()
         // TODO: throw exception
         return;
     }
-    std::shared_ptr<TreeNode> parent_node = m_head->m_parent_node;
+    std::shared_ptr<TreeNode> parent_node = m_head->parent_node;
     m_head = parent_node;
 }
