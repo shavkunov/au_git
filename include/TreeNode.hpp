@@ -4,14 +4,14 @@
 #include "Commit.hpp"
 #include <boost/serialization/split_member.hpp>
 
-class TreeNode
+class TreeNode // дерево коммитов 
 {
 public:
     TreeNode();
-    TreeNode(Commit commit, std::shared_ptr<TreeNode> parent_node = nullptr);
+    TreeNode(Commit commit, std::shared_ptr<TreeNode> parent_node = nullptr); // можно создать от коммита
 
-    Commit commit_value;
-    std::shared_ptr<TreeNode> parent_node;
+    Commit commit_value; 
+    std::shared_ptr<TreeNode> parent_node; // ссылка на предка
 
 private:
     friend class boost::serialization::access;

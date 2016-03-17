@@ -7,6 +7,7 @@
 
 #include "Sha256Converter.hpp"
 
+// обертка над хешами, хотим с ними работать
 class HashCodeType
 {
 public:

@@ -9,22 +9,23 @@
 #include "Commit.hpp"
 #include "TreeNode.hpp"
 
+// пока просто бамбук
 class CommitTree
 {
 public:
     CommitTree();
     ~CommitTree();
 
-    void push_commit(const Commit &commit);
-    void pop_commit();
+    void push_commit(const Commit &commit); // добавить коммит
+    void pop_commit(); // вроде удалить, но пока вообще не ясно что это и зачем
 
 private:
-    std::shared_ptr<TreeNode> find_node_by_hash_code(const std::string &hash_code);
+    std::shared_ptr<TreeNode> find_node_by_hash_code(const std::string &hash_code); 
 
     friend class boost::serialization::access;
 
     template<class Archive>
-    void save(Archive &ar, const unsigned version) const
+    void save(Archive &ar, const unsigned version) const // название
     {
         bool has_head = m_head != nullptr;
         ar << has_head;
@@ -36,7 +37,7 @@ private:
     }
 
     template<class Archive>
-    void load(Archive &ar, const unsigned version)
+    void load(Archive &ar, const unsigned version) // название
     {
         bool has_head;
         ar >> has_head;
@@ -51,7 +52,7 @@ private:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
-    std::shared_ptr<TreeNode> m_head;
+    std::shared_ptr<TreeNode> m_head; // начало дерева
 };
 
 #endif //AU_GIT_COMMITTREE_HPP

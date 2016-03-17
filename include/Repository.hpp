@@ -11,13 +11,13 @@
 class Repository
 {
 public:
-    Repository(const std::string& cur_path);
+    Repository(const std::string& cur_path); // конструктор от пути
     ~Repository();
 
     // ---------------------------------------- commands ----------------------------------------
-    void add_commit(const std::vector<std::string> &files);
-    void status() const;
-    void init_repository(const std::string& cur_dir);
+    void add_commit(const std::vector<std::string> &files); // можем добавить коммит
+    void status() const; // статус
+    void init_repository(const std::string& cur_dir); // что ЭТО
     //-------------------------------------------------------------------------------------------
 
 private:
@@ -27,11 +27,11 @@ private:
     void deserialize();
 
 private:
-    std::unique_ptr<CommitTree> m_commit_tree;
-    std::unique_ptr<DataStore> m_data_store;
-    StateRepository m_state_repository;
+    std::unique_ptr<CommitTree> m_commit_tree; // указатель на дерево коммитов
+    std::unique_ptr<DataStore> m_data_store; // указатель на data_store
+    StateRepository m_state_repository; // состояние???
 
-    boost::filesystem::path m_repository_path;
+    boost::filesystem::path m_repository_path; // путь до репозитория
 };
 
 #endif //AU_GIT_REPOSITORY_HPP

@@ -22,9 +22,9 @@ public:
     void add_to_storage(const std::string &storage_path) const;
 
 private:
-    std::string m_filename;
-    HashCodeType m_hash_code_file;
-    std::time_t m_timestamp;
+    std::string m_filename; // имя файла
+    HashCodeType m_hash_code_file; // его хеш
+    std::time_t m_timestamp; // время последнего изменения
 
     friend class boost::serialization::access;
 
