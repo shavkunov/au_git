@@ -9,14 +9,14 @@ class AbstractException : public std::exception // общий класс для 
 {
 public:
     AbstractException(char const* message)
-            : m_message(message)
+            : _message(message)
     {}
     virtual const char* what()
     {
-        return m_message;
+        return _message;
     }
 private:
-    char const* m_message;
+    char const* _message;
 };
 
 // далее вроде название класса все описывает

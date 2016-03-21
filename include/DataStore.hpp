@@ -13,7 +13,7 @@ public:
     boost::filesystem::path get_commit(const HashCodeType &hash_code) const; // даем ссылку на коммит по его хешу
 
 private:
-    boost::filesystem::path m_storage_path; // ссылка на datastore
+    boost::filesystem::path _storage_path; // ссылка на datastore
 };
 
 

@@ -1,4 +1,4 @@
-#include "CommitFile.hpp"
+#include "Commit.hpp"
 #include "Sha256Converter.hpp"
 
 #include <fstream>

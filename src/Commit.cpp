@@ -1,4 +1,7 @@
 #include "Commit.hpp"
+#include "RepositoryException.hpp"
+
+#include <boost/format.hpp>
 
 Commit::Commit()
 {
@@ -6,34 +9,38 @@ Commit::Commit()
 
 void Commit::add_files(const std::vector <CommitFile> &commit_files)
 {
-    m_commit_files.insert(m_commit_files.end(), commit_files.begin(), commit_files.end());
-    m_hash_code_commit.set_hash_code_by_list(commit_files, m_parent_hash_code);
-}
-
-void Commit::add_to_storage(const std::string &storage_path) const
-{
-    for(CommitFile commit_file : m_commit_files)//&
-        commit_file.add_to_storage(storage_path);
+    _commit_files.insert(_commit_files.end(), commit_files.begin(), commit_files.end());
+    _hash_code_commit.set_hash_code_by_list(commit_files, _parent_hash_code);
 }
 
 void Commit::set_parent_hash_code_commit(const HashCodeType parent_commit_type)
 {
-    m_parent_hash_code = parent_commit_type;
+    _parent_hash_code = parent_commit_type;
 }
 
 HashCodeType Commit::get_hash_code() const
 {
-    return m_hash_code_commit;
+    return _hash_code_commit;
+}
+
+boost::filesystem::path Commit::get_file_name(size_t i)
+{
+    return _commit_files[i]._filename;
+}
+
+HashCodeType Commit::get_file_hash(size_t i)
+{
+    return _commit_files[i]._hash_code_file;
 }
 
 bool Commit::operator==(const Commit &a)
 {
-    return m_hash_code_commit.hash_code().to_string() == a.m_hash_code_commit.hash_code().to_string();
+    return _hash_code_commit.hash_code().to_string() == a._hash_code_commit.hash_code().to_string();
 }
 
 const std::string Commit::hash_code() const
 {
-    return m_hash_code_commit.hash_code().to_string();
+    return _hash_code_commit.hash_code().to_string();
 }
 
 Commit Commit::create_commit_by_list(const std::vector<std::string> &files)
@@ -42,8 +49,22 @@ Commit Commit::create_commit_by_list(const std::vector<std::string> &files)
     std::vector<CommitFile> commit_files;
     commit_files.reserve(files.size());
 
-    for(size_t i = 0; i < files.size(); ++i)
-        commit_files.push_back(CommitFile(files[i]));
+    for (size_t i = 0; i < files.size(); i++)
+    {
+        if (!boost::filesystem::exists(files[i]))
+
+        {
+            std::string message = boost::str(boost::format("File [%1%] is not found!") % files[i]);
+            throw FileIsNotFoundException(message.c_str());
+        }
+
+        HashCodeType hash;
+        hash.set_hash_code(files[i]);
+        std::time_t time = boost::filesystem::last_write_time(files[i]);
+        CommitFile file = {files[i], hash, time};
+        commit_files.push_back(file);
+    }
+
     commit.add_files(commit_files);
 
     return commit;

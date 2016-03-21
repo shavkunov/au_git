@@ -5,6 +5,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/serialization/access.hpp>
 
+#include "Commit.hpp"
 #include "Sha256Converter.hpp"
 
 // обертка над хешами, хотим с ними работать
@@ -20,15 +21,15 @@ public:
     void set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code);
 
 private:
-    Sha256 m_hash_code;
-    bool m_valid_feature;
+    Sha256 _hash_code;
+    bool _valid_feature;
 
     friend class boost::serialization::access;
 
     template<class Archive>
     void serialize(Archive &ar, const unsigned version)
     {
-        ar & m_hash_code & m_valid_feature;
+        ar & _hash_code & _valid_feature;
     }
 };
 

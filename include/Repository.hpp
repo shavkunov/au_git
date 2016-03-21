@@ -27,11 +27,11 @@ private:
     void deserialize();
 
 private:
-    std::unique_ptr<CommitTree> m_commit_tree; // указатель на дерево коммитов
-    std::unique_ptr<DataStore> m_data_store; // указатель на data_store
-    StateRepository m_state_repository; // состояние???
+    std::unique_ptr<CommitTree> _commit_tree; // указатель на дерево коммитов
+    std::unique_ptr<DataStore> _data_store; // указатель на data_store
+    StateRepository _state_repository; // состояние???
 
-    boost::filesystem::path m_repository_path; // путь до репозитория
+    boost::filesystem::path _repository_path; // путь до репозитория
 };
 
 #endif //AU_GIT_REPOSITORY_HPP

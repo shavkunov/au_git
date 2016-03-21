@@ -27,12 +27,12 @@ private:
     template<class Archive>
     void save(Archive &ar, const unsigned version) const // название
     {
-        bool has_head = m_head != nullptr;
+        bool has_head = _head != nullptr;
         ar << has_head;
 
         if (has_head)
         {
-            ar << *m_head;
+            ar << *_head;
         }
     }
 
@@ -44,15 +44,15 @@ private:
 
         if (has_head)
         {
-            m_head = std::make_shared<TreeNode>();
-            ar >> *m_head;
+            _head = std::make_shared<TreeNode>();
+            ar >> *_head;
         }
     }
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
-    std::shared_ptr<TreeNode> m_head; // начало дерева
+    std::shared_ptr<TreeNode> _head; // начало дерева
 };
 
 #endif //AU_GIT_COMMITTREE_HPP
