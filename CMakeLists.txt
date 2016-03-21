@@ -8,7 +8,6 @@ include_directories(src include)
 set(SOURCE_FILES
         src/main.cpp
         src/CommitTree.cpp
-        src/CommitFile.cpp
         src/Commit.cpp
         src/HashCodeType.cpp
         src/TreeNode.cpp
@@ -19,7 +18,6 @@ set(SOURCE_FILES
 )
 
 set(INCLUDE_FILES
-        include/CommitFile.hpp
         include/Commit.hpp
         include/CommitTree.hpp
         include/DataStore.hpp
