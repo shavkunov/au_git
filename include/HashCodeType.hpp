@@ -5,10 +5,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/serialization/access.hpp>
 
-#include "Commit.hpp"
 #include "Sha256Converter.hpp"
 
-// обертка над хешами, хотим с ними работать
 class HashCodeType
 {
 public:
@@ -18,7 +16,7 @@ public:
     bool is_valid () const;
     void set_valid(bool state_valid_flag);
     void set_hash_code(const boost::filesystem::path &file_path);
-    void set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code);
+    void set_hash_code_by_list(const std::vector<class CommitFile> &commits, const HashCodeType &code);
 
 private:
     Sha256 _hash_code;

@@ -39,7 +39,7 @@ Sha256 encode_content_file(std::ifstream &in)
     return calculate_sha256(&bytes[0], file_length);
 }
 
-Sha256 encode_contents_list(const std::vector<CommitFile> &commits)
+Sha256 encode_contents_list(const std::vector<class CommitFile> &commits)
 {
     Sha256 res;
 
@@ -47,7 +47,7 @@ Sha256 encode_contents_list(const std::vector<CommitFile> &commits)
     SHA256_Init(&sha256_ctx);
 
     for(size_t i = 0; i < commits.size(); ++i)
-        SHA256_Update(&sha256_ctx, commits[i].hash_code_file().hash_code().bytes, Sha256::kSize);
+        SHA256_Update(&sha256_ctx, commits[i].get_file_hash().hash_code().bytes, Sha256::kSize);
     SHA256_Final(res.bytes, &sha256_ctx);
 
     return res;

@@ -10,56 +10,44 @@
 #include <boost/serialization/vector.hpp>
 
 #include "HashCodeType.hpp"
-
-
-struct CommitFile {
-    std::string _filename; // имя файла
-    HashCodeType _hash_code_file; // его хеш
-    std::time_t _timestamp; // время последнего изменения
-};
+#include "CommitFile.hpp"
 
 class Commit
 {
 public:
 
     Commit();
-    boost::filesystem::path get_file_name(size_t i);
-    HashCodeType get_file_hash(size_t i);
-    void add_files(const std::vector<CommitFile> &commit_files); // добавляет сущности CommitFile в коммит 
-    void add_to_storage(const std::string &storage_path) const; // добавляет в storage
-    void set_parent_hash_code_commit(const HashCodeType parent_commit_type); // мы понимаем предка нашего коммита
-    const std::string hash_code() const; // вернуть хеш коммита
-    static Commit create_commit_by_list(const std::vector<std::string> &files); // создание коммита из списка файлов
+    std::string get_file_name(size_t index) const;
+    HashCodeType get_file_hash(size_t index) const;
+    size_t files_amount() const;
+    void add_files(const std::vector<CommitFile> &commit_files);
+    void set_parent_hash_code_commit(const HashCodeType parent_commit_type);
+    const std::string hash_code() const;
+    static Commit create_commit_by_list(const std::vector<std::string> &files);
 
-    HashCodeType get_hash_code() const; // генерация хеша у коммита
+    HashCodeType get_hash_code() const;
 
-    friend bool operator<(const Commit &a, const Commit &b) // сравнивает по хешу
+    friend bool operator<(const Commit &a, const Commit &b)
     {
         return a._hash_code_commit.hash_code().to_string() <
                b._hash_code_commit.hash_code().to_string();
     }
 
-    bool operator==(const Commit &a); // ссылкаемся ли на один и тот же datastore?
+    bool operator==(const Commit &a);
 
 private:
 
-    HashCodeType _hash_code_commit; // хеш коммита
-    HashCodeType _parent_hash_code; // хеш предка
-    std::string _meta_info; // всякий треш
-    std::vector<CommitFile> _commit_files; // список файлов в коммите
+    HashCodeType _hash_code_commit;
+    HashCodeType _parent_hash_code;
+    std::string _meta_info;
+    std::vector<CommitFile> _commit_files;
 
-    friend class boost::serialization::access; // friend чтобы иметь доступ к private полям
+    friend class boost::serialization::access;
 
     template <class Archive>
-    void serialize(Archive &ar, const unsigned version) // запись репозитория куда-то
+    void serialize(Archive &ar, const unsigned version)
     {
         ar & _hash_code_commit & _parent_hash_code & _meta_info & _commit_files;
-
-        for (size_t i = 0; i < _commit_files.size(); i++)
-        {
-            CommitFile curFile = _commit_files[i];
-             ar & curFile._filename & curFile._hash_code_file & curFile._timestamp;
-        }
     }
 };
 

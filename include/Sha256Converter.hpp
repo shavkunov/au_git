@@ -4,7 +4,6 @@
 #include <boost/serialization/access.hpp>
 #include <string>
 #include <vector>
-#include "Commit.hpp"
 
 class Sha256
 {
@@ -34,7 +33,7 @@ Sha256 calculate_sha256(const uint8_t* bytes, size_t length);
 Sha256 encode_content_file(std::ifstream &in);
 
 //
-Sha256 encode_contents_list(const std::vector<CommitFile> &commits);
+Sha256 encode_contents_list(const std::vector<class CommitFile> &commits);
 
 //
 Sha256 add_hash_code(const Sha256 &code_first, const Sha256 &code_second);

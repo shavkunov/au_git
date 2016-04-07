@@ -1,5 +1,6 @@
 #include "DataStore.hpp"
 #include "RepositoryException.hpp"
+#include "CommitFile.hpp"
 
 #include <boost/format.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -7,6 +8,14 @@
 namespace
 {
     const std::string DATASTORE_FOLDER_NAME = ".objects";
+
+    bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
+    {
+        std::ifstream in(in_file.string(), std::ios::binary);
+        std::ofstream out(out_file.string(), std::ios::binary);
+        out << in.rdbuf();
+        return in && out;
+    }
 }
 
 DataStore::DataStore(const boost::filesystem::path &repository_folder)
@@ -23,7 +32,6 @@ bool DataStore::add_commit(const Commit &commit) const
     for (size_t i = 0; i < commit.files_amount(); i++)
     {
         std::string filename = commit.get_file_name(i);
-        HashCodeType hash_code_file = commit.get_file_hash(i);
 
         std::ifstream file(filename, std::ios::binary);
         std::string hash_code_file = encode_content_file(file).to_string();

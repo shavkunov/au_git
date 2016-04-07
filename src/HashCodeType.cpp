@@ -28,7 +28,7 @@ void HashCodeType::set_hash_code(const boost::filesystem::path &file_path)
     _hash_code = encode_content_file(file);
 }
 
-void HashCodeType::set_hash_code_by_list(const std::vector<CommitFile> &commits, const HashCodeType &code)
+void HashCodeType::set_hash_code_by_list(const std::vector<class CommitFile> &commits, const HashCodeType &code)
 {
     _hash_code = encode_contents_list(commits);
     _hash_code = add_hash_code(_hash_code, code.hash_code());

@@ -23,14 +23,19 @@ HashCodeType Commit::get_hash_code() const
     return _hash_code_commit;
 }
 
-boost::filesystem::path Commit::get_file_name(size_t i)
+std::string Commit::get_file_name(size_t index) const
 {
-    return _commit_files[i]._filename;
+    return _commit_files[index].get_file_name();
 }
 
-HashCodeType Commit::get_file_hash(size_t i)
+HashCodeType Commit::get_file_hash(size_t index) const
 {
-    return _commit_files[i]._hash_code_file;
+    return _commit_files[index].get_file_hash();
+}
+
+size_t Commit::files_amount() const
+{
+    return _commit_files.size();
 }
 
 bool Commit::operator==(const Commit &a)
@@ -61,7 +66,7 @@ Commit Commit::create_commit_by_list(const std::vector<std::string> &files)
         HashCodeType hash;
         hash.set_hash_code(files[i]);
         std::time_t time = boost::filesystem::last_write_time(files[i]);
-        CommitFile file = {files[i], hash, time};
+        CommitFile file = CommitFile(files[i], hash, time);
         commit_files.push_back(file);
     }
 

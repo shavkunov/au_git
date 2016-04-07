@@ -7,13 +7,13 @@
 class DataStore
 {
 public:
-    DataStore(const boost::filesystem::path &repository_folder); // создаем от папки репозитория
+    DataStore(const boost::filesystem::path &repository_folder);
 
-    bool add_commit(const Commit &commit) const; // добавляем сюда коммит
-    boost::filesystem::path get_commit(const HashCodeType &hash_code) const; // даем ссылку на коммит по его хешу
+    bool add_commit(const Commit &commit) const;
+    boost::filesystem::path get_commit(const HashCodeType &hash_code) const;
 
 private:
-    boost::filesystem::path _storage_path; // ссылка на datastore
+    boost::filesystem::path _storage_path;
 };
 
 

@@ -3,9 +3,9 @@
 
 #include <stdexcept>
 
-// разного рода ошибки, хотим при отладке понимать где что сломалось
 
-class AbstractException : public std::exception // общий класс для всех ошибок
+
+class AbstractException : public std::exception
 {
 public:
     AbstractException(char const* message)
@@ -18,8 +18,6 @@ public:
 private:
     char const* _message;
 };
-
-// далее вроде название класса все описывает
 
 class CommitException : public AbstractException 
 {
