@@ -1,4 +1,4 @@
-#include "Commit.hpp"
+#include "CommitFile.hpp"
 #include "Sha256Converter.hpp"
 
 #include <fstream>
@@ -39,7 +39,7 @@ Sha256 encode_content_file(std::ifstream &in)
     return calculate_sha256(&bytes[0], file_length);
 }
 
-Sha256 encode_contents_list(const std::vector<class CommitFile> &commits)
+Sha256 encode_contents_list(const std::vector<CommitFile> &commits)
 {
     Sha256 res;
 

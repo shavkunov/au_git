@@ -1,6 +1,5 @@
 #include "DataStore.hpp"
 #include "RepositoryException.hpp"
-#include "CommitFile.hpp"
 
 #include <boost/format.hpp>
 #include <boost/range/iterator_range.hpp>

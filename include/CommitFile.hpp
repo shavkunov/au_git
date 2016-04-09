@@ -12,7 +12,7 @@
 class CommitFile
 {
 public:
-    CommitFile();
+    CommitFile(){}
 
     CommitFile(std::string filename, HashCodeType hash, std::time_t time)
     {

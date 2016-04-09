@@ -1,4 +1,3 @@
-#include "Commit.hpp"
 #include "HashCodeType.hpp"
 #include <fstream>
 

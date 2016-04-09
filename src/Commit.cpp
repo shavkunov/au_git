@@ -66,7 +66,7 @@ Commit Commit::create_commit_by_list(const std::vector<std::string> &files)
         HashCodeType hash;
         hash.set_hash_code(files[i]);
         std::time_t time = boost::filesystem::last_write_time(files[i]);
-        CommitFile file = CommitFile(files[i], hash, time);
+        CommitFile file(files[i], hash, time);
         commit_files.push_back(file);
     }
 
