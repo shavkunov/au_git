@@ -17,6 +17,7 @@ public:
     void set_valid(bool state_valid_flag);
     void set_hash_code(const boost::filesystem::path &file_path);
     void set_hash_code_by_list(const std::vector<class CommitFile> &commits, const HashCodeType &code);
+    std::string to_string() const;
 
 private:
     Sha256 _hash_code;

@@ -1,6 +1,11 @@
 #include "HashCodeType.hpp"
 #include <fstream>
 
+std::string HashCodeType::to_string() const
+{
+    return _hash_code.to_string();
+}
+
 HashCodeType::HashCodeType()
     : _hash_code(), _valid_feature(true)
 {

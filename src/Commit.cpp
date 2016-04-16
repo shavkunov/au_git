@@ -45,7 +45,7 @@ bool Commit::operator==(const Commit &a)
 
 const std::string Commit::hash_code() const
 {
-    return _hash_code_commit.hash_code().to_string();
+    return _hash_code_commit.to_string();
 }
 
 Commit Commit::create_commit_by_list(const std::vector<std::string> &files)

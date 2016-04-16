@@ -3,8 +3,6 @@
 
 #include <stdexcept>
 
-
-
 class AbstractException : public std::exception
 {
 public:

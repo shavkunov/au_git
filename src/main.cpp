@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
         Repository repo("test");
         repo.init_repository("test");
 
-       std::vector<std::string> files;
-       files.push_back("test/input");
+        std::vector<std::string> files;
+        files.push_back("test/input");
 
-       repo.add_commit(files);
+        repo.add_commit(files);
     }
     catch (const std::exception &e)
     {

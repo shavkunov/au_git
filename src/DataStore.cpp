@@ -1,6 +1,7 @@
 #include "DataStore.hpp"
 #include "RepositoryException.hpp"
 
+#include <fstream>
 #include <boost/format.hpp>
 #include <boost/range/iterator_range.hpp>
 
@@ -10,8 +11,8 @@ namespace
 
     bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
     {
-        std::ifstream in(in_file.string(), std::ios::binary);
-        std::ofstream out(out_file.string(), std::ios::binary);
+        std::ifstream in(in_file.string().c_str(), std::ios::binary);
+        std::ofstream out(out_file.string().c_str(), std::ios::binary);
         out << in.rdbuf();
         return in && out;
     }
@@ -26,33 +27,41 @@ DataStore::DataStore(const boost::filesystem::path &repository_folder)
     }
 }
 
-bool DataStore::add_commit(const Commit &commit) const
+HashCodeType DataStore::add_file(const boost::filesystem::path file_path)
 {
-    for (size_t i = 0; i < commit.files_amount(); i++)
+    std::string filename = file_path.string();
+
+    std::ifstream file(filename, std::ios::binary);
+    HashCodeType hash_code_file;
+    hash_code_file.set_hash_code(file_path);
+
+    boost::filesystem::path in_file(filename);
+    boost::filesystem::path out_file(boost::filesystem::path(_storage_path) / hash_code_file.to_string());
+
+    if (!clone_file(in_file, out_file))
     {
-        std::string filename = commit.get_file_name(i);
-
-        std::ifstream file(filename, std::ios::binary);
-        std::string hash_code_file = encode_content_file(file).to_string();
-        boost::filesystem::path in_file(filename);
-        boost::filesystem::path out_file(boost::filesystem::path(_storage_path) / hash_code_file);
-
-        if (!clone_file(in_file, out_file))
-        {
-            std::string message = boost::str(boost::format("File [%1%] is not commited!") % filename);
-            throw FileIsNotCommitedException(message.c_str());
-        }
+        std::string message = boost::str(boost::format("File [%1%] is not commited!") % filename);
+        throw FileIsNotCommitedException(message.c_str());
     }
 
-    return false;
+    return hash_code_file;
 }
 
-boost::filesystem::path DataStore::get_commit(const HashCodeType &hash_code) const
+bool DataStore::is_file_exists(HashCodeType file_hash)
 {
+    return boost::filesystem::exists(boost::filesystem::path(_storage_path) / file_hash.to_string());
+}
+
+boost::filesystem::path DataStore::get_file(HashCodeType file_hash)
+{
+    if (!is_file_exists(file_hash))
+        return boost::filesystem::path("");
+
     for(auto& current_file : boost::make_iterator_range(boost::filesystem::directory_iterator(_storage_path), {}))
     {
-        if (current_file.path().filename() == hash_code.hash_code().to_string())
+        if (current_file.path().filename() == file_hash.to_string())
             return current_file;
     }
+
     return boost::filesystem::path("");
 }

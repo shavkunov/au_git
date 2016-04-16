@@ -54,7 +54,11 @@ void Repository::add_commit(const std::vector<std::string> &files)
     std::cerr << "Commit files" << std::endl;
     Commit new_commit = Commit::create_commit_by_list(files);
     _commit_tree->push_commit(new_commit);
-    _data_store->add_commit(new_commit);
+    for (size_t index = 0; index < new_commit.files_amount(); index++)
+    {
+        _data_store->add_file(boost::filesystem::path(new_commit.get_file_name(index)));
+    }
+
 }
 
 void Repository::status() const
