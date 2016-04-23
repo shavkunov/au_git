@@ -11,8 +11,8 @@ namespace
 
     bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
     {
-        std::ifstream in(in_file.string().c_str(), std::ios::binary);
-        std::ofstream out(out_file.string().c_str(), std::ios::binary);
+        std::ifstream in(in_file.string(), std::ios::binary);
+        std::ofstream out(out_file.string(), std::ios::binary);
         out << in.rdbuf();
         return in && out;
     }

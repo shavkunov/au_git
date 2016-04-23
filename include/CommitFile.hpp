@@ -15,11 +15,7 @@ public:
     CommitFile(){}
 
     CommitFile(std::string filename, HashCodeType hash, std::time_t time)
-    {
-        _filename = filename;
-        _hash_code_file = hash;
-        _timestamp = time;
-    }
+       : _filename(filename), _hash_code_file(hash), _timestamp(time) {}
 
     std::string get_file_name() const
     {

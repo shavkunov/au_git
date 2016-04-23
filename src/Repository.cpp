@@ -57,8 +57,11 @@ void Repository::add_commit(const std::vector<std::string> &files)
     for (size_t index = 0; index < new_commit.files_amount(); index++)
     {
         _data_store->add_file(boost::filesystem::path(new_commit.get_file_name(index)));
+        _state_repository.add_file(files[index]);
     }
 
+    _state_repository.set_commit(new_commit);
+    _state_repository.fix_duplicate();
 }
 
 void Repository::status() const
@@ -90,7 +93,7 @@ void Repository::serialize()
     std::ofstream out(out_path.string());
 
     boost::archive::text_oarchive ser(out);
-    ser << *_commit_tree << _state_repository;
+    ser << *_commit_tree;
 }
 
 void Repository::deserialize()
@@ -99,5 +102,6 @@ void Repository::deserialize()
     std::ifstream in(in_path.string());
     boost::archive::text_iarchive ser(in);
 
-    ser >> *_commit_tree >> _state_repository;
+    ser >> *_commit_tree;
+    _state_repository.deserialize();
 }
