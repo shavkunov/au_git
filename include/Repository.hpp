@@ -16,6 +16,7 @@ public:
 
     // ---------------------------------------- commands ----------------------------------------
     void add_commit(const std::vector<std::string> &files);
+    void revert_commit();
     void status() const;
     void init_repository(const std::string& cur_dir);
     //-------------------------------------------------------------------------------------------

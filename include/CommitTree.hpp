@@ -15,6 +15,8 @@ public:
     CommitTree();
     ~CommitTree();
 
+    void set_prev_hash_code(HashCodeType prev_file_hash, size_t pos);
+    Commit get_current_commit();
     void push_commit(const Commit &commit);
     void pop_commit();
 private:

@@ -2,11 +2,9 @@
 #define AU_GIT_STATEREPOSITORY_HPP
 
 #include "Commit.hpp"
-
-namespace
-{
-    const std::string repository_state_path = "state";
-}
+#include "HashCodeType.hpp"
+#include <boost/serialization/map.hpp>
+#include <map>
 
 class StateRepository
 {
@@ -14,55 +12,24 @@ public:
     StateRepository();
     ~StateRepository();
 
-    void fix_duplicate();
-    void add_file(std::string file_path);
-    void set_commit(Commit& commit);
-    void serialize();
-    void deserialize();
+    bool is_file_exists(std::string file_path);
+    HashCodeType get_file_hash(std::string file_path);
+    void update_file(std::string file_path, HashCodeType file_hash);
+    void delete_file(std::string file_path);
+    void set_commit(Commit commit);
 
 private:
-
-    boost::filesystem::path _repository_path;
     Commit _current_commit;
 
-    class path_saver
+    std::map<std::string, HashCodeType> _current_files;
+
+    friend class boost::serialization::access;
+
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned version)
     {
-
-    public:
-        path_saver(boost::filesystem::path path) : _file_path(path) {}
-
-        path_saver() {}
-
-        boost::filesystem::path get_file_path() const
-        {
-            return _file_path;
-        }
-
-        bool operator== (const path_saver ps) const
-        {
-            return _file_path.string() == ps.get_file_path().string();
-        }
-
-        bool operator< (const path_saver ps) const
-        {
-            return _file_path.string() < ps.get_file_path().string();
-        }
-
-        friend class boost::serialization::access;
-
-        template <class Archive>
-        void serialize(Archive &ar, const unsigned version)
-        {
-            ar & _file_path.string();
-        }
-
-    private:
-        boost::filesystem::path _file_path;
-
-    };
-
-    std::vector<path_saver> _current_files;
-
+        ar & _current_commit & _current_files;
+    }
 };
 
 #endif //AU_GIT_STATEREPOSITORY_HPP

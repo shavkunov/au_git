@@ -11,6 +11,7 @@ class HashCodeType
 {
 public:
     HashCodeType();
+    HashCodeType(bool valid);
 
     Sha256 hash_code() const;
     bool is_valid () const;

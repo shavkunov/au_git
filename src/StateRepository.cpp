@@ -8,48 +8,35 @@
 
 StateRepository::StateRepository()
 {
-    if (!_repository_path.empty())
-        deserialize();
 }
 
 StateRepository::~StateRepository()
 {
-    if (!_repository_path.empty())
-        serialize();
 }
 
-void StateRepository::set_commit(Commit &commit)
+void StateRepository::set_commit(Commit commit)
 {
     _current_commit = commit;
 }
 
-void StateRepository::add_file(std::string file_path)
+void StateRepository::update_file(std::string file_path, HashCodeType file_hash)
 {
-    path_saver tmp(file_path);
-    _current_files.push_back(tmp);
+    _current_files[file_path] = file_hash;
 }
 
-void StateRepository::fix_duplicate()
+void StateRepository::delete_file(std::string file_path)
 {
-    sort(_current_files.begin(), _current_files.end());
-    _current_files.erase(unique(_current_files.begin(), _current_files.end() ), _current_files.end());
+    _current_files.erase(file_path);
 }
 
-void StateRepository::serialize()
+bool StateRepository::is_file_exists(std::string file_path)
 {
-    boost::filesystem::path out_path = _repository_path / repository_state_path;
-    std::ofstream out(out_path.string());
-
-    boost::archive::text_oarchive ser(out);
-    ser << _current_commit << _current_files;
+    return _current_files.count(file_path);
 }
 
-void StateRepository::deserialize()
+HashCodeType StateRepository::get_file_hash(std::string file_path)
 {
-    boost::filesystem::path in_path = _repository_path / repository_state_path;
-    std::ifstream in(in_path.string());
-
-    boost::archive::text_iarchive ser(in);
-    ser >> _current_commit;// >> _current_files; ?!
+    return _current_files[file_path];
 }
+
 

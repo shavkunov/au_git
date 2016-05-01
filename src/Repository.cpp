@@ -56,12 +56,38 @@ void Repository::add_commit(const std::vector<std::string> &files)
     _commit_tree->push_commit(new_commit);
     for (size_t index = 0; index < new_commit.files_amount(); index++)
     {
-        _data_store->add_file(boost::filesystem::path(new_commit.get_file_name(index)));
-        _state_repository.add_file(files[index]);
+        std::string cur_file = new_commit.get_file_name(index);
+
+        if (_state_repository.is_file_exists(cur_file))
+        {
+            HashCodeType prev_hash;
+            prev_hash.set_hash_code(boost::filesystem::path(cur_file));
+            _commit_tree->set_prev_hash_code(prev_hash, index);
+        }
+
+        HashCodeType file_hash = _data_store->add_file(boost::filesystem::path(cur_file));
+        _state_repository.update_file(files[index], file_hash);
     }
 
     _state_repository.set_commit(new_commit);
-    _state_repository.fix_duplicate();
+}
+
+void Repository::revert_commit()
+{
+    std::cerr << "Revert Commit" << std::endl;
+
+    Commit last_commit = _commit_tree->get_current_commit();
+
+    for (size_t index = 0; index < last_commit.files_amount(); index++)
+    {
+        if (!last_commit.get_prev_file_hash(index).is_valid())//?
+            _state_repository.delete_file(last_commit.get_file_name(index));
+        else
+            _state_repository.update_file(last_commit.get_file_name(index), last_commit.get_prev_file_hash(index));
+    }
+
+    _commit_tree->pop_commit();
+    _state_repository.set_commit(_commit_tree->get_current_commit());
 }
 
 void Repository::status() const
@@ -93,7 +119,7 @@ void Repository::serialize()
     std::ofstream out(out_path.string());
 
     boost::archive::text_oarchive ser(out);
-    ser << *_commit_tree;
+    ser << *_commit_tree << _state_repository;
 }
 
 void Repository::deserialize()
@@ -102,6 +128,5 @@ void Repository::deserialize()
     std::ifstream in(in_path.string());
     boost::archive::text_iarchive ser(in);
 
-    ser >> *_commit_tree;
-    _state_repository.deserialize();
+    ser >> *_commit_tree >> _state_repository;
 }

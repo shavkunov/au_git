@@ -31,7 +31,6 @@ HashCodeType DataStore::add_file(const boost::filesystem::path file_path)
 {
     std::string filename = file_path.string();
 
-    std::ifstream file(filename, std::ios::binary);
     HashCodeType hash_code_file;
     hash_code_file.set_hash_code(file_path);
 

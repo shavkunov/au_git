@@ -11,6 +11,11 @@ HashCodeType::HashCodeType()
 {
 }
 
+HashCodeType::HashCodeType(bool valid)
+    : _hash_code(), _valid_feature(valid)
+{
+}
+
 Sha256 HashCodeType::hash_code() const
 {
     return _hash_code;

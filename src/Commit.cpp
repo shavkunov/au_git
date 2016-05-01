@@ -18,6 +18,11 @@ void Commit::set_parent_hash_code_commit(const HashCodeType parent_commit_type)
     _parent_hash_code = parent_commit_type;
 }
 
+void Commit::set_prev_file_hash(HashCodeType prev_file_hash, size_t index)
+{
+    _commit_files[index].set_prev_file_hash(prev_file_hash);
+}
+
 HashCodeType Commit::get_hash_code() const
 {
     return _hash_code_commit;
@@ -31,6 +36,11 @@ std::string Commit::get_file_name(size_t index) const
 HashCodeType Commit::get_file_hash(size_t index) const
 {
     return _commit_files[index].get_file_hash();
+}
+
+HashCodeType Commit::get_prev_file_hash(size_t index)
+{
+    return _commit_files[index].get_prev_file_hash();
 }
 
 size_t Commit::files_amount() const
