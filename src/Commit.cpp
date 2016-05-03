@@ -18,9 +18,16 @@ void Commit::set_parent_hash_code_commit(const HashCodeType parent_commit_type)
     _parent_hash_code = parent_commit_type;
 }
 
-void Commit::set_prev_file_hash(HashCodeType prev_file_hash, size_t index)
+void Commit::set_prev_file_hash(boost::filesystem::path file_path, size_t index)
 {
+    HashCodeType prev_file_hash;
+    prev_file_hash.set_hash_code(file_path);
     _commit_files[index].set_prev_file_hash(prev_file_hash);
+}
+
+void Commit::set_file_hash(HashCodeType file_hash, size_t index)
+{
+    _commit_files[index].set_file_hash(file_hash);
 }
 
 HashCodeType Commit::get_hash_code() const

@@ -21,7 +21,8 @@ public:
     size_t files_amount() const;
     void add_files(const std::vector<CommitFile> &commit_files);
     void set_parent_hash_code_commit(const HashCodeType parent_commit_type);
-    void set_prev_file_hash(HashCodeType prev_file_hash, size_t index);
+    void set_prev_file_hash(boost::filesystem::path file_path, size_t index);
+    void set_file_hash(HashCodeType file_hash, size_t index);
     HashCodeType get_prev_file_hash(size_t index);
     const std::string hash_code() const;
     static Commit create_commit_by_list(const std::vector<std::string> &files);

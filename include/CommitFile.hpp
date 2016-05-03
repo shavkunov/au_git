@@ -15,7 +15,7 @@ public:
     CommitFile(){}
 
     CommitFile(std::string filename, HashCodeType hash, std::time_t time)
-       : _filename(filename), _hash_code_file(hash), _prev_file_hash(false), _timestamp(time) {}
+       : _filename(filename), _file_hash(hash), _prev_file_hash(false), _timestamp(time) {}
 
     std::string get_file_name() const
     {
@@ -24,7 +24,7 @@ public:
 
     HashCodeType get_file_hash() const
     {
-        return _hash_code_file;
+        return _file_hash;
     }
 
     HashCodeType get_prev_file_hash()
@@ -37,9 +37,14 @@ public:
         _prev_file_hash = prev_file_hash;
     }
 
+    void set_file_hash(HashCodeType file_hash)
+    {
+        _file_hash = file_hash;
+    }
+
 private:
     std::string _filename;
-    HashCodeType _hash_code_file;
+    HashCodeType _file_hash;
     HashCodeType _prev_file_hash;
     std::time_t _timestamp;
 
@@ -48,7 +53,7 @@ private:
     template<class Archive>
     void serialize(Archive &ar, const unsigned version)
     {
-        ar & _filename & _hash_code_file & _prev_file_hash & _timestamp;
+        ar & _filename & _file_hash & _prev_file_hash & _timestamp;
     }
 };
 

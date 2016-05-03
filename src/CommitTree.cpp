@@ -19,18 +19,13 @@ CommitTree::~CommitTree()
 {
 }
 
-void CommitTree::set_prev_hash_code(HashCodeType prev_file_hash, size_t pos)
-{
-    _head->commit_value.set_prev_file_hash(prev_file_hash, pos);
-}
-
 void CommitTree::push_commit(const Commit &commit)
 {
     std::shared_ptr<TreeNode> new_node(new TreeNode(commit, _head));
     _head = new_node;
 }
 
-Commit CommitTree::get_current_commit()
+Commit& CommitTree::get_current_commit()
 {
     return _head->commit_value;
 }

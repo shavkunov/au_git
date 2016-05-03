@@ -16,7 +16,8 @@ public:
     HashCodeType get_file_hash(std::string file_path);
     void update_file(std::string file_path, HashCodeType file_hash);
     void delete_file(std::string file_path);
-    void set_commit(Commit commit);
+    void apply_commit(Commit& commit);
+    void cancel_commit(Commit& prev_commit);
 
 private:
     Commit _current_commit;

@@ -14,9 +14,46 @@ StateRepository::~StateRepository()
 {
 }
 
-void StateRepository::set_commit(Commit commit)
+void StateRepository::apply_commit(Commit& commit)
 {
     _current_commit = commit;
+
+    for (size_t index = 0; index < commit.files_amount(); index++)
+    {
+        std::string cur_file = commit.get_file_name(index);
+
+        if (is_file_exists(cur_file) && !commit.get_prev_file_hash(index).is_valid())
+            delete_file(cur_file);
+
+        update_file(cur_file, commit.get_file_hash(index));
+    }
+}
+
+void StateRepository::cancel_commit(Commit& prev_commit)
+{
+    for (size_t index = 0; index < _current_commit.files_amount(); index++)
+    {
+        std::string cur_file = _current_commit.get_file_name(index);
+        HashCodeType prev_file_hash = _current_commit.get_prev_file_hash(index);
+
+        if (is_file_exists(cur_file))
+        {
+            if (prev_file_hash.is_valid())
+            {
+                update_file(cur_file, prev_file_hash);
+            } else
+            {
+                delete_file(cur_file);
+            }
+        } else
+        {
+            update_file(cur_file, get_file_hash(cur_file));
+        }
+
+    }
+
+    _current_commit = prev_commit;
+
 }
 
 void StateRepository::update_file(std::string file_path, HashCodeType file_hash)

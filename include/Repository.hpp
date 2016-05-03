@@ -22,7 +22,6 @@ public:
     //-------------------------------------------------------------------------------------------
 
 private:
-    boost::filesystem::path is_repository_exists(boost::filesystem::path path) const;
 
     void serialize();
     void deserialize();

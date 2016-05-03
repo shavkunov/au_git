@@ -11,9 +11,9 @@ namespace
     const std::string au_git_folder_name = ".au_git";
 }
 
-Repository::Repository(const std::string& cur_dir)
+Repository::Repository(const std::string& repo_path)
 {
-    _repository_path = is_repository_exists(cur_dir);
+    _repository_path = repo_path;
 
     if (!_repository_path.empty())
     {
@@ -26,7 +26,6 @@ Repository::Repository(const std::string& cur_dir)
 
 void Repository::init_repository(const std::string& cur_dir)
 {
-    _repository_path = is_repository_exists(cur_dir);
 
     if (!_repository_path.empty())
     {
@@ -53,64 +52,34 @@ void Repository::add_commit(const std::vector<std::string> &files)
 {
     std::cerr << "Commit files" << std::endl;
     Commit new_commit = Commit::create_commit_by_list(files);
-    _commit_tree->push_commit(new_commit);
+
     for (size_t index = 0; index < new_commit.files_amount(); index++)
     {
         std::string cur_file = new_commit.get_file_name(index);
 
         if (_state_repository.is_file_exists(cur_file))
         {
-            HashCodeType prev_hash;
-            prev_hash.set_hash_code(boost::filesystem::path(cur_file));
-            _commit_tree->set_prev_hash_code(prev_hash, index);
+            new_commit.set_prev_file_hash(boost::filesystem::path(cur_file), index);
         }
-
-        HashCodeType file_hash = _data_store->add_file(boost::filesystem::path(cur_file));
-        _state_repository.update_file(files[index], file_hash);
     }
 
-    _state_repository.set_commit(new_commit);
+    _commit_tree->push_commit(new_commit);
+    _state_repository.apply_commit(new_commit);
 }
 
 void Repository::revert_commit()
 {
     std::cerr << "Revert Commit" << std::endl;
 
-    Commit last_commit = _commit_tree->get_current_commit();
-
-    for (size_t index = 0; index < last_commit.files_amount(); index++)
-    {
-        if (!last_commit.get_prev_file_hash(index).is_valid())//?
-            _state_repository.delete_file(last_commit.get_file_name(index));
-        else
-            _state_repository.update_file(last_commit.get_file_name(index), last_commit.get_prev_file_hash(index));
-    }
-
     _commit_tree->pop_commit();
-    _state_repository.set_commit(_commit_tree->get_current_commit());
+    Commit prev_commit = _commit_tree->get_current_commit();
+
+    _state_repository.cancel_commit(prev_commit);
 }
 
 void Repository::status() const
 {
     std::cerr << "Status of repository" << std::endl;
-}
-
-boost::filesystem::path Repository::is_repository_exists(boost::filesystem::path cur_dir) const
-{
-    boost::filesystem::directory_iterator iter;
-    if (boost::filesystem::exists(cur_dir) && boost::filesystem::is_directory(cur_dir))
-    {
-        while (!cur_dir.empty())
-        {
-            for (boost::filesystem::directory_iterator dir_iter(cur_dir); dir_iter != iter; ++dir_iter)
-            {
-                if (boost::filesystem::is_directory(*dir_iter) && dir_iter->path().filename() == au_git_folder_name)
-                    return *dir_iter;
-            }
-            cur_dir = cur_dir.parent_path();
-        }
-    }
-    return boost::filesystem::path();
 }
 
 void Repository::serialize()
