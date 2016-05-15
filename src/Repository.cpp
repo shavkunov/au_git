@@ -13,7 +13,7 @@ namespace
 
 Repository::Repository(const std::string& repo_path)
 {
-    _repository_path = repo_path;
+    _repository_path = is_repository_exists(repo_path);
 
     if (!_repository_path.empty())
     {
@@ -80,6 +80,24 @@ void Repository::revert_commit()
 void Repository::status() const
 {
     std::cerr << "Status of repository" << std::endl;
+}
+
+boost::filesystem::path Repository::is_repository_exists(boost::filesystem::path cur_dir)
+{
+    boost::filesystem::directory_iterator iter;
+    if (boost::filesystem::exists(cur_dir) && boost::filesystem::is_directory(cur_dir))
+    {
+        while (!cur_dir.empty())
+        {
+            for (boost::filesystem::directory_iterator dir_iter(cur_dir); dir_iter != iter; ++dir_iter)
+            {
+                if (boost::filesystem::is_directory(*dir_iter) && dir_iter->path().filename() == au_git_folder_name)
+                    return *dir_iter;
+            }
+            cur_dir = cur_dir.parent_path();
+        }
+    }
+    return boost::filesystem::path();
 }
 
 void Repository::serialize()

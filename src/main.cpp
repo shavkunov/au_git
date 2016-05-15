@@ -13,29 +13,29 @@
 Command& parse(int argc, char* argv[])
 {
 
-    Empty* empty = new Empty();
+    EmptyCommand* empty = new EmptyCommand();
 
-    if (!strcmp(argv[0], "augit"))
+    if (strcmp(argv[0], "augit") == 0)
     {
-        if (!strcmp(argv[1], "init"))
+        if (strcmp(argv[1], "init") == 0)
         {
             std::string repo_name = argv[2];
-            Init* init_command = new Init(repo_name);
+            InitCommand* init_command = new InitCommand(repo_name);
             return *init_command;
         }
 
-        if (!strcmp(argv[1], "revert"))
+        if (strcmp(argv[1], "revert") == 0)
         {
-            Revert* revert_command = new Revert();
+            RevertCommand* revert_command = new RevertCommand();
             return *revert_command;
         }
 
-        if (!strcmp(argv[1], "add"))
+        if (strcmp(argv[1], "add") == 0)
         {
             std::vector<std::string> add_files;
 
             std::copy(argv + 2, argv + argc, add_files.begin());
-            Add* add_command = new Add(add_files);
+            AddCommand* add_command = new AddCommand(add_files);
             return *add_command;
         }
     } else
@@ -52,7 +52,15 @@ int main(int argc, char* argv[])
     try
     {
         Command& command = parse(argc, argv);
-        command.exec();
+        if (command.is_repository_needed())
+        {
+            boost::filesystem::path repo_path = Repository::is_repository_exists("");
+            Repository repo(repo_path.string());
+            command.exec(repo);
+        } else
+        {
+            command.exec();
+        }
     }
     catch (const std::exception &e)
     {

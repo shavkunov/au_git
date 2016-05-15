@@ -13,6 +13,7 @@ class Repository
 public:
     Repository(const std::string& cur_path);
     ~Repository();
+    static boost::filesystem::path is_repository_exists(boost::filesystem::path cur_dir);
 
     // ---------------------------------------- commands ----------------------------------------
     void add_commit(const std::vector<std::string> &files);
@@ -26,7 +27,6 @@ private:
     void serialize();
     void deserialize();
 
-private:
     std::unique_ptr<CommitTree> _commit_tree;
     std::unique_ptr<DataStore> _data_store;
     StateRepository _state_repository;

@@ -1,73 +1,72 @@
 #ifndef AU_GIT_COMMAND_HPP
 #define AU_GIT_COMMAND_HPP
 
+#include "Repository.hpp"
 #include <boost/filesystem.hpp>
 #include <string>
-
-namespace
-{
-    const std::string au_git_folder_name = ".au_git";
-}
 
 class Command
 {
 public:
+    virtual void exec(Repository& repo);
+    virtual void exec();
 
-    boost::filesystem::path is_repository_exists(boost::filesystem::path cur_dir)const
+    Command(bool flag)
     {
-        boost::filesystem::directory_iterator iter;
-        if (boost::filesystem::exists(cur_dir) && boost::filesystem::is_directory(cur_dir))
-        {
-            while (!cur_dir.empty())
-            {
-                for (boost::filesystem::directory_iterator dir_iter(cur_dir); dir_iter != iter; ++dir_iter)
-                {
-                    if (boost::filesystem::is_directory(*dir_iter) && dir_iter->path().filename() == au_git_folder_name)
-                        return *dir_iter;
-                }
-                cur_dir = cur_dir.parent_path();
-            }
-        }
-        return boost::filesystem::path();
+        _repo_presence = flag;
     }
-	virtual void exec() = 0;
+
+    bool is_repository_needed()
+    {
+        return _repo_presence;
+    }
+
+protected:
+    bool _repo_presence;
 };
 
-class Init : public Command 
+class InitCommand : public Command
 {
 public:
-    Init(std::string name);
+    InitCommand(std::string name);
     void exec();
+    void exec(Repository& repo) {}
 private:
     std::string _repo_name;
 };
 
-class Revert : public Command
+class RevertCommand : public Command
 {
 public:
-    Revert();
-    void exec();
+    RevertCommand();
+    void exec(Repository& repo);
+    void exec() {}
 };
 
-class Add : public Command
+class AddCommand : public Command
 {
 public:
-    Add(std::vector<std::string>& add_files);
-    void exec();
+    AddCommand(std::vector<std::string>& add_files);
+    void exec(Repository& repo);
+    void exec() {}
 private:
     std::vector<std::string> _files;
 };
 
-class Empty : public Command
+class EmptyCommand : public Command
 {
 public:
-    void exec();
+    void exec() {}
+    void exec(Repository& repo) {}
+    EmptyCommand();
 };
 
-class Help : public Command
+class HelpCommand : public Command
 {
 public:
+    HelpCommand();
     void exec();
+    void exec(Repository& repo) {}
 };
 
 #endif //AU_GIT_COMMAND_HPP

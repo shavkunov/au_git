@@ -15,9 +15,11 @@ set(SOURCE_FILES
         src/Sha256Converter.cpp
         src/DataStore.cpp
         src/Repository.cpp
+        src/Command.cpp
 )
 
 set(INCLUDE_FILES
+        include/CommitFile.hpp
         include/Commit.hpp
         include/CommitTree.hpp
         include/DataStore.hpp
@@ -27,6 +29,7 @@ set(INCLUDE_FILES
         include/Sha256Converter.hpp
         include/StateRepository.hpp
         include/TreeNode.hpp
+        include/Command.hpp
 )
 
 add_executable(au_git ${SOURCE_FILES} ${INCLUDE_FILES})
