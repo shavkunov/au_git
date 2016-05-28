@@ -2,6 +2,8 @@
 #define AU_GIT_TREENODE_HPP
 
 #include "Commit.hpp"
+#include "Log.hpp"
+
 #include <boost/serialization/split_member.hpp>
 
 class TreeNode

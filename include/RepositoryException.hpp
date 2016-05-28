@@ -2,6 +2,8 @@
 #define AU_GIT_REPOSITORYEXCEPTION_HPP
 
 #include <stdexcept>
+#include "Log.hpp"
+
 
 class AbstractException : public std::exception
 {

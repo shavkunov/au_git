@@ -2,7 +2,9 @@
 #define AU_GIT_STATEREPOSITORY_HPP
 
 #include "Commit.hpp"
+#include "Log.hpp"
 #include "HashCodeType.hpp"
+
 #include <boost/serialization/map.hpp>
 #include <map>
 
@@ -18,6 +20,7 @@ public:
     void delete_file(std::string file_path);
     void apply_commit(Commit& commit);
     void cancel_commit(Commit& prev_commit);
+    void status() const;
 
 private:
     Commit _current_commit;

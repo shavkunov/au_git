@@ -2,6 +2,7 @@
 #define AU_GIT_COMMITFILE_HPP
 
 #include "HashCodeType.hpp"
+#include "Log.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/serialization/access.hpp>

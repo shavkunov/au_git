@@ -6,6 +6,7 @@
 
 #include <boost/serialization/split_member.hpp>
 
+#include "Log.hpp"
 #include "Commit.hpp"
 #include "TreeNode.hpp"
 
@@ -16,7 +17,7 @@ public:
     ~CommitTree();
 
     Commit& get_current_commit();
-    void push_commit(const Commit &commit);
+    void push_commit(Commit &commit);
     void pop_commit();
 private:
     std::shared_ptr<TreeNode> find_node_by_hash_code(const std::string &hash_code); 

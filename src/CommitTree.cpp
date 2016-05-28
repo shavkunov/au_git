@@ -10,8 +10,9 @@
 #include <boost/serialization/utility.hpp>
 
 #include "RepositoryException.hpp"
+#include "Log.hpp"
 
-CommitTree::CommitTree()
+CommitTree::CommitTree() : _head(nullptr)
 {
 }
 
@@ -19,10 +20,14 @@ CommitTree::~CommitTree()
 {
 }
 
-void CommitTree::push_commit(const Commit &commit)
+void CommitTree::push_commit(Commit &commit)
 {
+    //LOG << "start of creating shared ptr" << std::endl;
     std::shared_ptr<TreeNode> new_node(new TreeNode(commit, _head));
+    //LOG << "made shared ptr" << std::endl;
     _head = new_node;
+
+    //LOG << "push done" << std::endl;
 }
 
 Commit& CommitTree::get_current_commit()

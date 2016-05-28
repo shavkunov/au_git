@@ -8,6 +8,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
 
+#include "Log.hpp"
 #include "HashCodeType.hpp"
 #include "CommitFile.hpp"
 

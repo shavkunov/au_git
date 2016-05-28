@@ -3,6 +3,7 @@
 
 #include <boost/filesystem.hpp>
 #include "HashCodeType.hpp"
+#include "Log.hpp"
 
 class DataStore
 {

@@ -2,14 +2,16 @@
 #define AU_GIT_COMMAND_HPP
 
 #include "Repository.hpp"
+#include "Log.hpp"
+
 #include <boost/filesystem.hpp>
 #include <string>
 
 class Command
 {
 public:
-    virtual void exec(Repository& repo);
-    virtual void exec();
+    virtual void exec(Repository& repo) = 0;
+    virtual void exec() = 0;
 
     Command(bool flag)
     {
@@ -28,19 +30,21 @@ protected:
 class InitCommand : public Command
 {
 public:
-    InitCommand(std::string name);
+    InitCommand();
     void exec();
-    void exec(Repository& repo) {}
+    void exec(Repository& repo) {};
 private:
-    std::string _repo_name;
+
 };
 
 class RevertCommand : public Command
 {
 public:
-    RevertCommand();
+    RevertCommand(std::string file);
     void exec(Repository& repo);
     void exec() {}
+private:
+    std::string _file;
 };
 
 class AddCommand : public Command
@@ -59,6 +63,14 @@ public:
     void exec() {}
     void exec(Repository& repo) {}
     EmptyCommand();
+};
+
+class StatusCommand : public Command
+{
+public:
+    void exec() {}
+    void exec(Repository& repo);
+    StatusCommand();
 };
 
 class HelpCommand : public Command

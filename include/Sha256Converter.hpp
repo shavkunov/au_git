@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "Log.hpp"
+
 class Sha256
 {
 public:

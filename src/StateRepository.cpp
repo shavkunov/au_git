@@ -14,6 +14,16 @@ StateRepository::~StateRepository()
 {
 }
 
+void StateRepository::status() const
+{
+    std::cerr << "Status of repository:" << std::endl;
+
+    for (auto it : _current_files)
+    {
+        std::cout << it.first << std::endl;
+    }
+}
+
 void StateRepository::apply_commit(Commit& commit)
 {
     _current_commit = commit;
@@ -23,7 +33,11 @@ void StateRepository::apply_commit(Commit& commit)
         std::string cur_file = commit.get_file_name(index);
 
         if (is_file_exists(cur_file) && !commit.get_prev_file_hash(index).is_valid())
+        {
             delete_file(cur_file);
+            LOG << "deleting " << cur_file << std::endl;
+            continue;
+        }
 
         update_file(cur_file, commit.get_file_hash(index));
     }

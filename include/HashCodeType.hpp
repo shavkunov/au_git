@@ -6,6 +6,7 @@
 #include <boost/serialization/access.hpp>
 
 #include "Sha256Converter.hpp"
+#include "Log.hpp"
 
 class HashCodeType
 {

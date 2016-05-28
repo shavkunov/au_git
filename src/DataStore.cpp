@@ -7,7 +7,7 @@
 
 namespace
 {
-    const std::string DATASTORE_FOLDER_NAME = ".objects";
+    const std::string DATASTORE_FOLDER_NAME = "objects";
 
     bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
     {

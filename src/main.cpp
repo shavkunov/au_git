@@ -13,36 +13,49 @@
 Command& parse(int argc, char* argv[])
 {
 
-    EmptyCommand* empty = new EmptyCommand();
-
-    if (strcmp(argv[0], "augit") == 0)
+    if (strcmp(argv[1], "init") == 0)
     {
-        if (strcmp(argv[1], "init") == 0)
-        {
-            std::string repo_name = argv[2];
-            InitCommand* init_command = new InitCommand(repo_name);
-            return *init_command;
-        }
-
-        if (strcmp(argv[1], "revert") == 0)
-        {
-            RevertCommand* revert_command = new RevertCommand();
-            return *revert_command;
-        }
-
-        if (strcmp(argv[1], "add") == 0)
-        {
-            std::vector<std::string> add_files;
-
-            std::copy(argv + 2, argv + argc, add_files.begin());
-            AddCommand* add_command = new AddCommand(add_files);
-            return *add_command;
-        }
-    } else
-    {
-        // throw exception
+        InitCommand* init_command = new InitCommand();
+        return *init_command;
     }
 
+    if (strcmp(argv[1], "revert_file") == 0)
+    {
+        std::string revert_file = argv[2];
+        RevertCommand* revert_command = new RevertCommand(revert_file);
+        return *revert_command;
+    }
+
+    if (strcmp(argv[1], "add") == 0)
+    {
+
+        std::vector<std::string> add_files;
+
+        for (int i = 2; i < argc; i++)
+        {
+            std::string cur_file = argv[i];
+            add_files.push_back(cur_file);
+        }
+
+        AddCommand* add_command = new AddCommand(add_files);
+
+        return *add_command;
+    }
+
+    if (strcmp(argv[1], "help") == 0)
+    {
+        HelpCommand* help_command = new HelpCommand();
+        return *help_command;
+    }
+
+
+    if (strcmp(argv[1], "status") == 0)
+    {
+        StatusCommand* status_command = new StatusCommand();
+        return *status_command;
+    }
+
+    EmptyCommand* empty = new EmptyCommand();
     return *empty;
 }
 
@@ -54,7 +67,7 @@ int main(int argc, char* argv[])
         Command& command = parse(argc, argv);
         if (command.is_repository_needed())
         {
-            boost::filesystem::path repo_path = Repository::is_repository_exists("");
+            boost::filesystem::path repo_path = Repository::is_repository_exists(".");
             Repository repo(repo_path.string());
             command.exec(repo);
         } else
