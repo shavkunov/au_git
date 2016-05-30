@@ -1,35 +1,38 @@
 cmake_minimum_required(VERSION 2.8)
 project(au_git)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++11 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++11 -g -DLOG_ALL=1")
 
 include_directories(src include)
 
 set(SOURCE_FILES
-        src/main.cpp
-        src/CommitTree.cpp
-        src/Commit.cpp
-        src/HashCodeType.cpp
-        src/TreeNode.cpp
-        src/StateRepository.cpp
-        src/Sha256Converter.cpp
-        src/DataStore.cpp
-        src/Repository.cpp
         src/Command.cpp
+        src/Commit.cpp
+        src/CommitTree.cpp
+        src/DataStore.cpp
+        src/FileManager.cpp
+        src/HashCodeType.cpp
+        src/Repository.cpp
+        src/Sha256Converter.cpp
+        src/StateRepository.cpp
+        src/TreeNode.cpp
+        src/main.cpp
 )
 
 set(INCLUDE_FILES
-        include/CommitFile.hpp
+        include/Command.hpp
         include/Commit.hpp
+        include/CommitFile.hpp
         include/CommitTree.hpp
         include/DataStore.hpp
+        include/FileManager.hpp
         include/HashCodeType.hpp
-        include/RepositoryException.hpp
+        include/Log.hpp
         include/Repository.hpp
+        include/RepositoryException.hpp
         include/Sha256Converter.hpp
         include/StateRepository.hpp
         include/TreeNode.hpp
-        include/Command.hpp
 )
 
 add_executable(au_git ${SOURCE_FILES} ${INCLUDE_FILES})
