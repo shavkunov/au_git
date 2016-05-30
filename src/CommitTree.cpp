@@ -30,11 +30,6 @@ void CommitTree::push_commit(Commit &commit)
     //LOG << "push done" << std::endl;
 }
 
-Commit& CommitTree::get_current_commit()
-{
-    return _head->commit_value;
-}
-
 std::shared_ptr<TreeNode> CommitTree::find_node_by_hash_code(const std::string& hash_code)
 {
     for(std::shared_ptr<TreeNode> ptr = _head; ptr != nullptr; ptr = ptr->parent_node)

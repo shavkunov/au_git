@@ -4,6 +4,7 @@
 
 InitCommand::InitCommand() : Command(false)  {}
 RevertCommand::RevertCommand(std::string file) : Command(true), _file(file) {}
+RevertCommand::RevertCommand() : Command(true), _file("") {}
 EmptyCommand::EmptyCommand() : Command(false) {}
 HelpCommand::HelpCommand() : Command(false) {}
 StatusCommand::StatusCommand() : Command(true) {}
@@ -25,7 +26,15 @@ void InitCommand::exec()
 void RevertCommand::exec(Repository& repo)
 {
     std::cout << "Reverting..." << std::endl;
-    repo.revert_file(_file);
+
+    if (_file == "")
+    {
+        repo.revert_commit();
+    } else
+    {
+        repo.revert_file(_file);
+    }
+
     std::cout << "Done" << std::endl;
 }
 
@@ -47,5 +56,6 @@ void HelpCommand::exec()
     std::cout << "Usage:" << std::endl;
     std::cout << "au_git add {list of files:" << std::endl;
     std::cout << "au_git revert_file {file_name}" << std::endl;
+    std::cout << "au_git revert_commit" << std::endl;
     std::cout << "au_git init " << std::endl;
 }

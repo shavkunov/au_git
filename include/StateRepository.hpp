@@ -21,6 +21,8 @@ public:
     void apply_commit(Commit& commit);
     void cancel_commit(Commit& prev_commit);
     void status() const;
+    std::map<std::string, HashCodeType> get_all_files();
+    Commit& get_current_commit();
 
 private:
     Commit _current_commit;

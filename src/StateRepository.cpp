@@ -24,6 +24,10 @@ void StateRepository::status() const
     }
 }
 
+std::map<std::string, HashCodeType> StateRepository::get_all_files() {
+    return _current_files;
+}
+
 void StateRepository::apply_commit(Commit& commit)
 {
     _current_commit = commit;
@@ -35,7 +39,7 @@ void StateRepository::apply_commit(Commit& commit)
         if (is_file_exists(cur_file) && !commit.get_prev_file_hash(index).is_valid())
         {
             delete_file(cur_file);
-            LOG << "deleting " << cur_file << std::endl;
+            //LOG << "deleting " << cur_file << std::endl;
             continue;
         }
 
@@ -70,6 +74,11 @@ void StateRepository::cancel_commit(Commit& prev_commit)
 
 }
 
+Commit& StateRepository::get_current_commit()
+{
+    return _current_commit;
+}
+
 void StateRepository::update_file(std::string file_path, HashCodeType file_hash)
 {
     _current_files[file_path] = file_hash;
@@ -89,5 +98,3 @@ HashCodeType StateRepository::get_file_hash(std::string file_path)
 {
     return _current_files[file_path];
 }
-
-

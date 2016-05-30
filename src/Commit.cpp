@@ -3,9 +3,7 @@
 
 #include <boost/format.hpp>
 
-Commit::Commit()
-{
-}
+Commit::Commit() {}
 
 void Commit::add_files(const std::vector <CommitFile> &commit_files)
 {

@@ -26,6 +26,12 @@ Command& parse(int argc, char* argv[])
         return *revert_command;
     }
 
+    if (strcmp(argv[1], "revert_commit") == 0)
+    {
+        RevertCommand* revert_command = new RevertCommand();
+        return *revert_command;
+    }
+
     if (strcmp(argv[1], "add") == 0)
     {
 

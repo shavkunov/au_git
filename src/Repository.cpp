@@ -18,7 +18,7 @@ Repository::Repository(const std::string& repo_path)
 
     if (!_repository_path.empty())
     {
-        LOG << "create" << std::endl;
+        //LOG << "create" << std::endl;
         _data_store = std::unique_ptr<DataStore>(new DataStore(_repository_path));
         _commit_tree = std::unique_ptr<CommitTree>(new CommitTree());
         deserialize();
@@ -57,7 +57,7 @@ void Repository::add_commit(const std::vector<std::string> &files)
     for (size_t index = 0; index < new_commit.files_amount(); index++)
     {
         std::string cur_file = new_commit.get_file_name(index);
-
+        std::cout << cur_file << std::endl;
 
         if (_state_repository.is_file_exists(cur_file))
         {
@@ -65,7 +65,6 @@ void Repository::add_commit(const std::vector<std::string> &files)
         }
         _data_store->add_file(boost::filesystem::path(cur_file));
     }
-
 
     _commit_tree->push_commit(new_commit);
     //LOG << "added?" << std::endl;
@@ -86,10 +85,13 @@ void Repository::revert_commit()
 {
     std::cout << "Revert commit" << std::endl;
 
+    Commit prev_commit = _state_repository.get_current_commit();
     _commit_tree->pop_commit();
-    Commit prev_commit = _commit_tree->get_current_commit();
 
     _state_repository.cancel_commit(prev_commit);
+
+    FileManager manager;
+    manager.sync_with_work_copy(_data_store, _state_repository, prev_commit);
 }
 
 void Repository::status() const

@@ -41,6 +41,7 @@ class RevertCommand : public Command
 {
 public:
     RevertCommand(std::string file);
+    RevertCommand();
     void exec(Repository& repo);
     void exec() {}
 private:
