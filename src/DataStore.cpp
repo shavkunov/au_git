@@ -8,14 +8,15 @@
 namespace
 {
     const std::string DATASTORE_FOLDER_NAME = "objects";
+}
 
-    bool clone_file(boost::filesystem::path in_file, boost::filesystem::path out_file)
-    {
-        std::ifstream in(in_file.string(), std::ios::binary);
-        std::ofstream out(out_file.string(), std::ios::binary);
-        out << in.rdbuf();
-        return in && out;
-    }
+bool DataStore::clone_file(boost::filesystem::path in_file, 
+                boost::filesystem::path out_file)
+{
+    std::ifstream in(in_file.string(), std::ios::binary);
+    std::ofstream out(out_file.string(), std::ios::binary);
+    out << in.rdbuf();
+    return in && out;
 }
 
 DataStore::DataStore(const boost::filesystem::path &repository_folder)

@@ -1,4 +1,5 @@
 #include "Repository.hpp"
+#include "FileManager.hpp"
 
 #include <fstream>
 #include <string>
@@ -60,9 +61,9 @@ void Repository::add_commit(const std::vector<std::string> &files)
 
         if (_state_repository.is_file_exists(cur_file))
         {
-            _data_store->add_file(boost::filesystem::path(cur_file));
-            new_commit.set_prev_file_hash(boost::filesystem::path(cur_file), index);
+            new_commit.set_prev_file_hash(_state_repository.get_file_hash(cur_file), index);
         }
+        _data_store->add_file(boost::filesystem::path(cur_file));
     }
 
 
@@ -73,21 +74,12 @@ void Repository::add_commit(const std::vector<std::string> &files)
 
 void Repository::revert_file(std::string file)
 {
-    std::cout << "Revert file" << std::endl;
+    std::cout << "Revert file " << file << std::endl;
 
-    if (_state_repository.is_file_exists(file))
-    {
-        std::vector<std::string> files;
-        files.push_back(file);
+    FileManager manager;
+    HashCodeType file_hash = _state_repository.get_file_hash(file);
 
-        Commit commit = Commit::create_commit_by_list(files);
-
-        _commit_tree->push_commit(commit);
-        _state_repository.apply_commit(commit);
-    } else
-    {
-        // throw
-    }
+    manager.restore_file(file_hash, file, _data_store);
 }
 
 void Repository::revert_commit()
